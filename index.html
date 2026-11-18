@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portofolio Pribadi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-main: #0b0f19;
+      --bg-card: #151b26;
+      --bg-glass: rgba(21, 27, 38, 0.78);
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --accent: #00ffaa;
+      --accent-dim: rgba(0, 255, 170, 0.14);
+      --accent-hover: #00e096;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --danger: #ff5c7c;
+      --warning: #fbbf24;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-main);
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(0, 255, 170, 0.08), transparent 35%),
+        radial-gradient(circle at 85% 80%, rgba(56, 189, 248, 0.07), transparent 40%);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input, textarea, select {
+      font-family: inherit;
+    }
+
+    /* =====================================================================
+       ATURAN PEMISAH TAMPILAN HP (ANDROID/iOS < 1024px) VS LAPTOP (>= 1024px)
+       ===================================================================== */
+    .desktop-only {
+      display: none !important;
+    }
+
+    .mobile-only {
+      display: block;
+    }
+
+    /* Tombol & Panel Admin DIBLOKIR TOTAL di layar HP (< 1024px) */
+    #btn-open-login,
+    #modal-login-admin,
+    #admin-workspace {
+      display: none !important;
+    }
+
+    @media (min-width: 1024px) {
+      .desktop-only {
+        display: flex !important;
+      }
+      .desktop-block {
+        display: block !important;
+      }
+      .mobile-only {
+        display: none !important;
+      }
+      #btn-open-login {
+        display: inline-flex !important;
+      }
+      #modal-login-admin.active {
+        display: flex !important;
+      }
+      #admin-workspace.active {
+        display: flex !important;
+      }
+    }
+
+    /* =====================================================================
+       NAVIGASI LAPTOP (TOP GLASS NAVBAR)
+       ===================================================================== */
+    .top-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(11, 15, 25, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-glass);
+      padding: 0 5%;
+      height: 72px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 14px var(--accent);
+    }
+
+    .desktop-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.22s ease;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-btn.active {
+      color: #0b0f19;
+      background: var(--accent);
+      box-shadow: 0 0 18px rgba(0, 255, 170, 0.35);
+    }
+
+    .btn-admin-trigger {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.22s ease;
+    }
+
+    .btn-admin-trigger:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 15px rgba(0, 255, 170, 0.18);
+    }
+
+    /* =====================================================================
+       NAVIGASI HP ANDROID / iOS (HEADER RINGKAS + BOTTOM APP BAR)
+       ===================================================================== */
+    .mobile-top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 45;
+      background: rgba(11, 15, 25, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-glass);
+      padding: 14px 18px;
+    }
+
+    .mobile-top-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mobile-status-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 255, 170, 0.25);
+    }
+
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      z-index: 60;
+      background: rgba(21, 27, 38, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 8px 6px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+    }
+
+    .mobile-bottom-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+    }
+
+    .mob-nav-item {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 6px 2px;
+      border-radius: 14px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mob-nav-item svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .mob-nav-item.active {
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* =====================================================================
+       KONTAINER KONTEN PENGUNJUNG (5 MENU)
+       ===================================================================== */
+    .visitor-container {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 24px 18px 105px 18px;
+    }
+
+    @media (min-width: 1024px) {
+      .visitor-container {
+        padding: 48px 24px 72px 24px;
+      }
+    }
+
+    .page-section {
+      display: none;
+      animation: fadeSlide 0.28s ease;
+    }
+
+    .page-section.active {
+      display: block;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .glass-card {
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 22px;
+      transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(0, 255, 170, 0.28);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* HERO BERANDA: MOBILE VS DESKTOP */
+    .hero-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-wrapper {
+        display: grid;
+        grid-template-columns: 1.35fr 0.85fr;
+        align-items: center;
+        gap: 48px;
+        min-height: 68vh;
+      }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(0, 255, 170, 0.3);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: 1.9rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-title {
+        font-size: 3.1rem;
+      }
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 0.96rem;
+      margin-bottom: 24px;
+      max-width: 600px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0b0f19;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.22s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 255, 170, 0.32);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-glass);
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.22s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .hero-photo-box {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 255, 170, 0.25);
+      background: var(--bg-card);
+      aspect-ratio: 4 / 3;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-photo-box {
+        aspect-ratio: 1 / 1.08;
+      }
+    }
+
+    .hero-photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* SECTION HEADERS */
+    .section-head {
+      margin-bottom: 24px;
+    }
+
+    .section-head h2 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    @media (min-width: 1024px) {
+      .section-head h2 {
+        font-size: 2.15rem;
+      }
+    }
+
+    .section-head p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-top: 4px;
+    }
+
+    /* GRID RESPONSIF: 1 KOLOM DI HP, MULTI-KOLOM DI LAPTOP */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    @media (min-width: 1024px) {
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+    }
+
+    /* SKILL BAR */
+    .skill-row {
+      margin-bottom: 14px;
+    }
+
+    .skill-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .skill-track {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ffaa, #38bdf8);
+      border-radius: 999px;
+    }
+
+    /* TIMELINE PEKERJAAN */
+    .job-badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    /* PROYEK CARD */
+    .project-thumb {
+      width: 100%;
+      height: 185px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      background: #0f172a;
+    }
+
+    .tag-pill {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      margin: 4px 4px 0 0;
+    }
+
+    /* FILTER BAR PROYEK */
+    .filter-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    @media (min-width: 1024px) {
+      .filter-bar {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .input-field {
+      width: 100%;
+      background: rgba(11, 15, 25, 0.85);
+      border: 1px solid var(--border-glass);
+      color: var(--text-main);
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 255, 170, 0.15);
+    }
+
+    /* =====================================================================
+       PANEL ADMIN & MODAL LOGIN (EKSKLUSIF LAPTOP >= 1024px)
+       ===================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(5, 8, 15, 0.82);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 420px;
+      background: var(--bg-card);
+      border: 1px solid rgba(0, 255, 170, 0.28);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+    }
+
+    .admin-shell {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: var(--bg-main);
+      flex-direction: row;
+    }
+
+    .admin-sidebar {
+      width: 265px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border-glass);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+    }
+
+    .admin-menu-btn {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .admin-menu-btn:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+
+    .admin-menu-btn.active {
+      background: var(--accent-dim);
+      border-color: rgba(0, 255, 170, 0.35);
+      color: var(--accent);
+    }
+
+    .admin-main {
+      flex: 1;
+      padding: 28px 36px;
+      overflow-y: auto;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .stat-val {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-top: 4px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+
+    .data-table th,
+    .data-table td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--border-glass);
+    }
+
+    .data-table th {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: 1px solid var(--border-glass);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      cursor: pointer;
+      margin-right: 4px;
+    }
+
+    .btn-sm:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-danger-sm {
+      border-color: rgba(255, 92, 124, 0.35);
+      color: var(--danger);
+    }
+
+    .btn-danger-sm:hover {
+      background: rgba(255, 92, 124, 0.15);
+      color: var(--danger);
+    }
+
+    /* CUSTOM TOAST & CONFIRM MODAL */
+    .toast-box {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 200;
+      background: #151b26;
+      border: 1px solid var(--accent);
+      color: var(--text-main);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      display: none;
+    }
+
+    .toast-box.show {
+      display: block;
+      animation: fadeSlide 0.22s ease;
+    }
+
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 210;
+      background: rgba(5, 8, 15, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .confirm-overlay.show {
+      display: flex;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NOTIFIKASI TOAST KUSTOM -->
+  <div id="custom-toast" class="toast-box"></div>
+
+  <!-- MODAL KONFIRMASI HAPUS KUSTOM -->
+  <div id="custom-confirm" class="confirm-overlay">
+    <div class="modal-box" style="max-width: 380px;">
+      <h3 style="margin-bottom: 8px; font-size: 1.1rem;">Konfirmasi Hapus</h3>
+      <p id="confirm-text" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+        Apakah Anda yakin ingin menghapus data ini?
+      </p>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn-secondary" onclick="tutupConfirm(false)">Batal</button>
+        <button type="button" class="btn-primary" style="background: var(--danger); color: #fff;" onclick="tutupConfirm(true)">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       HEADER KHUSUS HP (ANDROID / iOS < 1024px) - TANPA TOMBOL ADMIN
+       ===================================================================== -->
+  <header class="mobile-top-bar mobile-only">
+    <div class="mobile-top-inner">
+      <div class="brand-logo">
+        <span class="brand-dot"></span>
+        <span>Portofolio</span>
+      </div>
+      <span class="mobile-status-pill" id="mobile-active-label">Beranda</span>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       HEADER KHUSUS LAPTOP (>= 1024px) - TERMASUK TOMBOL LOGIN ADMIN
+       ===================================================================== -->
+  <header class="top-navbar desktop-only">
+    <div class="brand-logo">
+      <span class="brand-dot"></span>
+      <span>Portofolio Pribadi</span>
+    </div>
+
+    <nav class="desktop-nav-links" aria-label="Menu Utama Desktop">
+      <button type="button" class="nav-btn active" data-menu="beranda" onclick="bukaMenu('beranda')">Beranda</button>
+      <button type="button" class="nav-btn" data-menu="tentang" onclick="bukaMenu('tentang')">Tentang Saya</button>
+      <button type="button" class="nav-btn" data-menu="pekerjaan" onclick="bukaMenu('pekerjaan')">Pekerjaan</button>
+      <button type="button" class="nav-btn" data-menu="proyek" onclick="bukaMenu('proyek')">Proyek</button>
+      <button type="button" class="nav-btn" data-menu="kontak" onclick="bukaMenu('kontak')">Kontak Saya</button>
+    </nav>
+
+    <button type="button" id="btn-open-login" class="btn-admin-trigger" onclick="bukaModalLogin()">
+      <span>&#128274; Login Admin</span>
+    </button>
+  </header>
+
+  <!-- =====================================================================
+       AREA PENGUNJUNG (READ-ONLY DARI DATA YANG DIKELOLA ADMIN)
+       ===================================================================== -->
+  <main class="visitor-container" id="visitor-app">
+
+    <!-- MENU 1: BERANDA -->
+    <section id="sec-beranda" class="page-section active">
+      <div class="hero-wrapper" id="render-beranda"></div>
+    </section>
+
+    <!-- MENU 2: TENTANG SAYA -->
+    <section id="sec-tentang" class="page-section">
+      <div class="section-head">
+        <h2>Tentang Saya</h2>
+        <p>Profil singkat, keahlian utama, dan latar belakang perjalanan saya.</p>
+      </div>
+      <div class="grid-2" id="render-tentang"></div>
+    </section>
+
+    <!-- MENU 3: PEKERJAAN -->
+    <section id="sec-pekerjaan" class="page-section">
+      <div class="section-head">
+        <h2>Pengalaman Pekerjaan</h2>
+        <p>Rekam jejak karier dan kontribusi profesional yang telah dikerjakan.</p>
+      </div>
+      <div class="grid-2" id="render-pekerjaan"></div>
+    </section>
+
+    <!-- MENU 4: PROYEK -->
+    <section id="sec-proyek" class="page-section">
+      <div class="section-head">
+        <h2>Portofolio Proyek</h2>
+        <p>Kumpulan karya dan sistem yang pernah dibangun.</p>
+      </div>
+
+      <div class="filter-bar">
+        <div id="filter-kategori-list" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+        <div style="min-width: 240px;">
+          <input type="text" id="input-cari-proyek" class="input-field" placeholder="Cari judul atau teknologi..." oninput="cariProyekHandler()" />
+        </div>
+      </div>
+
+      <div class="grid-3" id="render-proyek"></div>
+      <div style="text-align: center; margin-top: 24px;">
+        <button type="button" id="btn-load-more-proyek" class="btn-secondary" style="display: none;" onclick="muatProyekBerikutnya()">Muat Lebih Banyak</button>
+      </div>
+    </section>
+
+    <!-- MENU 5: KONTAK SAYA -->
+    <section id="sec-kontak" class="page-section">
+      <div class="section-head">
+        <h2>Kontak Saya</h2>
+        <p>Hubungi saya melalui kanal resmi di bawah ini atau kirim pesan langsung.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="glass-card">
+          <h3 style="margin-bottom: 14px; font-size: 1.15rem;">Informasi Kontak</h3>
+          <div id="render-kontak-info"></div>
+        </div>
+
+        <div class="glass-card">
+          <h3 style="margin-bottom: 14px; font-size: 1.15rem;">Kirim Pesan Langsung</h3>
+          <form onsubmit="event.preventDefault(); kirimPesanPengunjung();">
+            <div class="form-group">
+              <label class="form-label">Nama Lengkap</label>
+              <input type="text" id="msg-nama" class="input-field" required placeholder="Masukkan nama Anda" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Alamat Email</label>
+              <input type="email" id="msg-email" class="input-field" required placeholder="nama@email.com" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Subjek</label>
+              <input type="text" id="msg-subjek" class="input-field" required placeholder="Tujuan menghubungi..." />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Isi Pesan</label>
+              <textarea id="msg-isi" class="input-field" rows="4" required placeholder="Tulis pesan Anda di sini..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%;">Kirim Pesan</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       BOTTOM NAVIGATION BAR KHUSUS HP (ANDROID / iOS < 1024px)
+       ===================================================================== -->
+  <nav class="mobile-bottom-nav mobile-only" aria-label="Menu Utama HP">
+    <div class="mobile-bottom-grid">
+      <button type="button" class="mob-nav-item active" data-menu="beranda" onclick="bukaMenu('beranda')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span>Beranda</span>
+      </button>
+      <button type="button" class="mob-nav-item" data-menu="tentang" onclick="bukaMenu('tentang')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        <span>Tentang</span>
+      </button>
+      <button type="button" class="mob-nav-item" data-menu="pekerjaan" onclick="bukaMenu('pekerjaan')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        <span>Kerja</span>
+      </button>
+      <button type="button" class="mob-nav-item" data-menu="proyek" onclick="bukaMenu('proyek')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <span>Proyek</span>
+      </button>
+      <button type="button" class="mob-nav-item" data-menu="kontak" onclick="bukaMenu('kontak')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span>Kontak</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- =====================================================================
+       MODAL LOGIN ADMIN (HANYA BISA MUNCUL DI LAYAR LAPTOP >= 1024px)
+       ===================================================================== -->
+  <div id="modal-login-admin" class="modal-backdrop">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h3 style="font-size: 1.25rem; font-weight: 800;">Login Panel Admin</h3>
+        <button type="button" class="btn-sm" onclick="tutupModalLogin()">&#10005;</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 18px;">
+        Khusus pengelola portofolio melalui perangkat Laptop/Desktop.
+      </p>
+      <form onsubmit="event.preventDefault(); prosesLoginAdmin();">
+        <div class="form-group">
+          <label class="form-label">Username Admin</label>
+          <input type="text" id="login-username" class="input-field" required placeholder="admin" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="login-password" class="input-field" required placeholder="••••••••" />
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 6px;">Masuk ke Dashboard</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       PANEL ADMIN LENGKAP (OPERASIONAL 5 MENU & STATISTIK PENGUNJUNG)
+       ===================================================================== -->
+  <div id="admin-workspace" class="admin-shell">
+    <aside class="admin-sidebar">
+      <div>
+        <div class="brand-logo" style="margin-bottom: 24px; padding-left: 8px;">
+          <span class="brand-dot"></span>
+          <span>Admin CMS Neon</span>
+        </div>
+
+        <button type="button" class="admin-menu-btn active" data-tab="stats" onclick="gantiTabAdmin('stats')">
+          <span>&#128202; Progres & Pengunjung</span>
+        </button>
+        <button type="button" class="admin-menu-btn" data-tab="beranda" onclick="gantiTabAdmin('beranda')">
+          <span>&#127968; Kelola Beranda</span>
+        </button>
+        <button type="button" class="admin-menu-btn" data-tab="tentang" onclick="gantiTabAdmin('tentang')">
+          <span>&#128100; Kelola Tentang Saya</span>
+        </button>
+        <button type="button" class="admin-menu-btn" data-tab="pekerjaan" onclick="gantiTabAdmin('pekerjaan')">
+          <span>&#128188; Kelola Pekerjaan</span>
+        </button>
+        <button type="button" class="admin-menu-btn" data-tab="proyek" onclick="gantiTabAdmin('proyek')">
+          <span>&#128640; Kelola Proyek</span>
+        </button>
+        <button type="button" class="admin-menu-btn" data-tab="kontak" onclick="gantiTabAdmin('kontak')">
+          <span>&#9993; Kelola Kontak & Pesan</span>
+        </button>
+        <button type="button" class="admin-menu-btn" data-tab="akun" onclick="gantiTabAdmin('akun')">
+          <span>&#9881; Pengaturan Akun</span>
+        </button>
+      </div>
+
+      <div style="border-top: 1px solid var(--border-glass); padding-top: 14px;">
+        <button type="button" class="btn-secondary" style="width: 100%; margin-bottom: 8px; font-size: 0.82rem;" onclick="lihatTampilanPengunjung()">
+          Lihat Web Pengunjung
+        </button>
+        <button type="button" class="btn-sm btn-danger-sm" style="width: 100%; padding: 9px;" onclick="logoutAdmin()">
+          Keluar (Logout)
+        </button>
+      </div>
+    </aside>
+
+    <section class="admin-main" id="admin-content-area"></section>
+  </div>
+
+  <script>
+    // =========================================================================
+    // KONFIGURASI & STATE APLIKASI
+    // =========================================================================
+    var API_ENDPOINT = '/api/index';
+    var STATE = {
+      menuAktif: 'beranda',
+      tabAdmin: 'stats',
+      tokenAdmin: localStorage.getItem('portofolio_admin_token') || '',
+      dataPublik: {
+        beranda: null,
+        tentang: [],
+        pekerjaan: [],
+        proyek: [],
+        kontak: []
+      },
+      filterKategori: 'Semua',
+      kataKunciProyek: '',
+      offsetProyek: 0,
+      hasMoreProyek: false,
+      adminData: {
+        statistik: {
+          total_views: 0,
+          pengunjung_unik: 0,
+          perangkat: [],
+          menu_populer: [],
+          log_terbaru: []
+        },
+        konten: {
+          beranda: [],
+          tentang: [],
+          pekerjaan: [],
+          proyek: [],
+          kontak_info: [],
+          pesan_masuk: []
+        }
+      }
+    };
+
+    var confirmCallback = null;
+
+    // =========================================================================
+    // UTILITAS AMAN (ESCAPE HTML, DETEKSI PERANGKAT, TOAST, KOMPRESI FOTO)
+    // =========================================================================
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function deteksiPerangkat() {
+      var lebar = window.innerWidth || document.documentElement.clientWidth;
+      var ua = navigator.userAgent || '';
+      var isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+      if (lebar < 1024 || isMobileUA) {
+        return 'mobile';
+      }
+      return 'desktop';
+    }
+
+    function tampilToast(pesan, isError) {
+      var el = document.getElementById('custom-toast');
+      el.textContent = pesan;
+      el.style.borderColor = isError ? 'var(--danger)' : 'var(--accent)';
+      el.classList.add('show');
+      setTimeout(function () {
+        el.classList.remove('show');
+      }, 3200);
+    }
+
+    function bukaConfirm(pesan, cb) {
+      document.getElementById('confirm-text').textContent = pesan;
+      confirmCallback = cb;
+      document.getElementById('custom-confirm').classList.add('show');
+    }
+
+    function tutupConfirm(hasil) {
+      document.getElementById('custom-confirm').classList.remove('show');
+      if (hasil && typeof confirmCallback === 'function') {
+        confirmCallback();
+      }
+      confirmCallback = null;
+    }
+
+    function kompresGambarFile(file, callback) {
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = new Image();
+        img.onload = function () {
+          var canvas = document.createElement('canvas');
+          var maxW = 800;
+          var scale = img.width > maxW ? maxW / img.width : 1;
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          var compressed = canvas.toDataURL('image/jpeg', 0.75);
+          callback(compressed);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // =========================================================================
+    // PENGAMAN LAYAR: JIKA DI HP, PAKSA TUTUP LOGIN & PANEL ADMIN
+    // =========================================================================
+    function jagaKeamananPerangkat() {
+      if (deteksiPerangkat() === 'mobile') {
+        var modal = document.getElementById('modal-login-admin');
+        var adminWs = document.getElementById('admin-workspace');
+        if (modal) modal.classList.remove('active');
+        if (adminWs) adminWs.classList.remove('active');
+      }
+    }
+
+    window.addEventListener('resize', jagaKeamananPerangkat);
+
+    // =========================================================================
+    // PENCATATAN KUNJUNGAN PENGUNJUNG (VISITOR VIEW TRACKER)
+    // =========================================================================
+    function getVisitorHash() {
+      var hash = localStorage.getItem('portofolio_visitor_id');
+      if (!hash) {
+        hash = 'vis_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+        localStorage.setItem('portofolio_visitor_id', hash);
+      }
+      return hash;
+    }
+
+    function catatKunjungan(halaman) {
+      var payload = {
+        action: 'track_view',
+        visitor_hash: getVisitorHash(),
+        halaman: String(halaman || 'beranda'),
+        tipe_perangkat: deteksiPerangkat()
+      };
+      fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(function () {});
+    }
+
+    // =========================================================================
+    // NAVIGASI 5 MENU PENGUNJUNG (BERANDA, TENTANG, PEKERJAAN, PROYEK, KONTAK)
+    // =========================================================================
+    function bukaMenu(namaMenu) {
+      STATE.menuAktif = namaMenu;
+      var labelMap = {
+        beranda: 'Beranda',
+        tentang: 'Tentang Saya',
+        pekerjaan: 'Pekerjaan',
+        proyek: 'Proyek',
+        kontak: 'Kontak Saya'
+      };
+
+      var mobLabel = document.getElementById('mobile-active-label');
+      if (mobLabel) mobLabel.textContent = labelMap[namaMenu] || 'Beranda';
+
+      var semuaSec = document.querySelectorAll('.page-section');
+      for (var i = 0; i < semuaSec.length; i++) {
+        semuaSec[i].classList.remove('active');
+      }
+      var target = document.getElementById('sec-' + namaMenu);
+      if (target) target.classList.add('active');
+
+      var semuaBtn = document.querySelectorAll('.nav-btn, .mob-nav-item');
+      for (var j = 0; j < semuaBtn.length; j++) {
+        if (semuaBtn[j].getAttribute('data-menu') === namaMenu) {
+          semuaBtn[j].classList.add('active');
+        } else {
+          semuaBtn[j].classList.remove('active');
+        }
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      catatKunjungan(namaMenu);
+    }
+
+    // =========================================================================
+    // MUAT & RENDER DATA PUBLIK DARI NEON DATABASE
+    // =========================================================================
+    function muatDataPublik() {
+      fetch(API_ENDPOINT + '?action=public_data')
+        .then(function (res) { return res.json(); })
+        .then(function (json) {
+          if (json && json.sukses && json.data) {
+            STATE.dataPublik = json.data;
+            renderSemuaHalamanPublik();
+          }
+        })
+        .catch(function () {
+          renderSemuaHalamanPublik();
+        });
+    }
+
+    function renderSemuaHalamanPublik() {
+      renderBerandaPublik();
+      renderTentangPublik();
+      renderPekerjaanPublik();
+      renderFilterKategoriProyek();
+      renderProyekPublik(STATE.dataPublik.proyek || []);
+      renderKontakPublik();
+    }
+
+    function renderBerandaPublik() {
+      var box = document.getElementById('render-beranda');
+      var b = STATE.dataPublik.beranda || {
+        headline: 'Portofolio Pribadi',
+        subheadline: 'Selamat Datang di Website Portofolio Saya',
+        deskripsi_singkat: 'Silakan kelola konten menu ini melalui Panel Admin di Laptop.',
+        url_foto_profil: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
+        url_cv: '#',
+        teks_tombol_cta: 'Lihat Proyek Saya'
+      };
+
+      var html = '';
+      html += '<div>';
+      html += '<div class="hero-badge">&#9679; Portofolio Resmi</div>';
+      html += '<h1 class="hero-title">' + escapeHtml(b.headline) + '</h1>';
+      html += '<div class="hero-subtitle">' + escapeHtml(b.subheadline) + '</div>';
+      html += '<p class="hero-desc">' + escapeHtml(b.deskripsi_singkat) + '</p>';
+      html += '<div class="hero-actions">';
+      html += '<button type="button" class="btn-primary" onclick="bukaMenu(\'proyek\')">' + escapeHtml(b.teks_tombol_cta || 'Lihat Proyek Saya') + '</button>';
+      if (b.url_cv && b.url_cv !== '#') {
+        html += '<a href="' + escapeHtml(b.url_cv) + '" target="_blank" rel="noopener" class="btn-secondary">Unduh CV / Profil</a>';
+      } else {
+        html += '<button type="button" class="btn-secondary" onclick="bukaMenu(\'kontak\')">Hubungi Saya</button>';
+      }
+      html += '</div>';
+      html += '</div>';
+
+      html += '<div class="hero-photo-box">';
+      html += '<img src="' + escapeHtml(b.url_foto_profil || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80') + '" alt="Foto Profil" />';
+      html += '</div>';
+
+      box.innerHTML = html;
+    }
+
+    function renderTentangPublik() {
+      var box = document.getElementById('render-tentang');
+      var list = STATE.dataPublik.tentang || [];
+      if (list.length === 0) {
+        box.innerHTML = '<div class="glass-card"><p style="color:var(--text-muted);">Belum ada data Tentang Saya yang dipublikasikan.</p></div>';
+        return;
+      }
+
+      var bioItems = [];
+      var skillItems = [];
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].kategori === 'skill') {
+          skillItems.push(list[i]);
+        } else {
+          bioItems.push(list[i]);
+        }
+      }
+
+      var html = '';
+      html += '<div class="glass-card">';
+      html += '<h3 style="margin-bottom: 14px; color: var(--accent);">Profil & Latar Belakang</h3>';
+      for (var j = 0; j < bioItems.length; j++) {
+        html += '<div style="margin-bottom: 16px;">';
+        html += '<h4 style="font-size: 1.02rem; margin-bottom: 4px;">' + escapeHtml(bioItems[j].judul) + '</h4>';
+        html += '<p style="color: var(--text-muted); font-size: 0.9rem;">' + escapeHtml(bioItems[j].deskripsi) + '</p>';
+        html += '</div>';
+      }
+      html += '</div>';
+
+      html += '<div class="glass-card">';
+      html += '<h3 style="margin-bottom: 14px; color: var(--accent);">Keahlian & Kompetensi</h3>';
+      if (skillItems.length === 0) {
+        html += '<p style="color: var(--text-muted); font-size: 0.9rem;">Daftar keahlian akan tampil di sini setelah ditambahkan Admin.</p>';
+      } else {
+        for (var k = 0; k < skillItems.length; k++) {
+          var persen = Number(skillItems[k].persentase_skill) || 80;
+          html += '<div class="skill-row">';
+          html += '<div class="skill-label"><span>' + escapeHtml(skillItems[k].judul) + '</span><span style="color:var(--accent);">' + persen + '%</span></div>';
+          html += '<div class="skill-track"><div class="skill-fill" style="width:' + persen + '%;"></div></div>';
+          html += '</div>';
+        }
+      }
+      html += '</div>';
+
+      box.innerHTML = html;
+    }
+
+    function renderPekerjaanPublik() {
+      var box = document.getElementById('render-pekerjaan');
+      var list = STATE.dataPublik.pekerjaan || [];
+      if (list.length === 0) {
+        box.innerHTML = '<div class="glass-card"><p style="color:var(--text-muted);">Belum ada riwayat pekerjaan yang ditampilkan.</p></div>';
+        return;
+      }
+
+      var html = '';
+      for (var i = 0; i < list.length; i++) {
+        var item = list[i];
+        html += '<div class="glass-card">';
+        html += '<span class="job-badge">' + escapeHtml(item.periode_mulai) + ' - ' + escapeHtml(item.periode_selesai) + '</span>';
+        html += '<h3 style="font-size: 1.15rem; margin-bottom: 4px;">' + escapeHtml(item.posisi) + '</h3>';
+        html += '<div style="color: var(--accent); font-size: 0.9rem; font-weight: 600; margin-bottom: 10px;">' + escapeHtml(item.nama_perusahaan) + (item.lokasi ? ' &bull; ' + escapeHtml(item.lokasi) : '') + '</div>';
+        html += '<p style="color: var(--text-muted); font-size: 0.9rem;">' + escapeHtml(item.deskripsi_tugas) + '</p>';
+        html += '</div>';
+      }
+      box.innerHTML = html;
+    }
+
+    function renderFilterKategoriProyek() {
+      var box = document.getElementById('filter-kategori-list');
+      var list = STATE.dataPublik.proyek || [];
+      var kategoriMap = { 'Semua': true };
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].kategori_proyek) {
+          kategoriMap[list[i].kategori_proyek] = true;
+        }
+      }
+
+      var html = '';
+      var keys = Object.keys(kategoriMap);
+      for (var j = 0; j < keys.length; j++) {
+        var kat = keys[j];
+        var aktif = STATE.filterKategori === kat ? ' active' : '';
+        html += '<button type="button" class="nav-btn' + aktif + '" onclick="pilihKategoriProyek(\'' + escapeHtml(kat) + '\')">' + escapeHtml(kat) + '</button>';
+      }
+      box.innerHTML = html;
+    }
+
+    function pilihKategoriProyek(kat) {
+      STATE.filterKategori = kat;
+      STATE.offsetProyek = 0;
+      renderFilterKategoriProyek();
+      ambilProyekTersaring(false);
+    }
+
+    var timerCariProyek = null;
+    function cariProyekHandler() {
+      clearTimeout(timerCariProyek);
+      timerCariProyek = setTimeout(function () {
+        STATE.kataKunciProyek = String(document.getElementById('input-cari-proyek').value || '').trim();
+        STATE.offsetProyek = 0;
+        ambilProyekTersaring(false);
+      }, 300);
+    }
+
+    function ambilProyekTersaring(append) {
+      var url = API_ENDPOINT + '?action=filter_proyek&kategori=' + encodeURIComponent(STATE.filterKategori) +
+        '&cari=' + encodeURIComponent(STATE.kataKunciProyek) +
+        '&limit=6&offset=' + STATE.offsetProyek;
+
+      fetch(url)
+        .then(function (r) { return r.json(); })
+        .then(function (json) {
+          if (json && json.sukses) {
+            STATE.hasMoreProyek = Boolean(json.hasMore);
+            var btnMore = document.getElementById('btn-load-more-proyek');
+            btnMore.style.display = STATE.hasMoreProyek ? 'inline-flex' : 'none';
+            if (append) {
+              STATE.dataPublik.proyek = STATE.dataPublik.proyek.concat(json.proyek);
+              renderProyekPublik(STATE.dataPublik.proyek);
+            } else {
+              renderProyekPublik(json.proyek);
+            }
+          }
+        })
+        .catch(function () {});
+    }
+
+    function muatProyekBerikutnya() {
+      STATE.offsetProyek += 6;
+      ambilProyekTersaring(true);
+    }
+
+    function renderProyekPublik(list) {
+      var box = document.getElementById('render-proyek');
+      if (!list || list.length === 0) {
+        box.innerHTML = '<div class="glass-card"><p style="color:var(--text-muted);">Belum ada proyek yang sesuai filter.</p></div>';
+        return;
+      }
+
+      var html = '';
+      for (var i = 0; i < list.length; i++) {
+        var p = list[i];
+        var tags = String(p.teknologi_dipakai || '').split(',');
+        var tagHtml = '';
+        for (var t = 0; t < tags.length; t++) {
+          var cleanTag = tags[t].trim();
+          if (cleanTag) {
+            tagHtml += '<span class="tag-pill">' + escapeHtml(cleanTag) + '</span>';
+          }
+        }
+
+        html += '<article class="glass-card" style="display:flex; flex-direction:column; justify-content:space-between;">';
+        html += '<div>';
+        if (p.url_thumbnail) {
+          html += '<img class="project-thumb" src="' + escapeHtml(p.url_thumbnail) + '" alt="' + escapeHtml(p.judul_proyek) + '" loading="lazy" />';
+        }
+        html += '<span class="job-badge">' + escapeHtml(p.kategori_proyek) + '</span>';
+        html += '<h3 style="font-size: 1.12rem; margin-bottom: 6px;">' + escapeHtml(p.judul_proyek) + '</h3>';
+        html += '<p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 10px;">' + escapeHtml(p.ringkasan) + '</p>';
+        html += '<div style="margin-bottom: 14px;">' + tagHtml + '</div>';
+        html += '</div>';
+
+        html += '<div style="display:flex; gap:8px; margin-top:8px;">';
+        if (p.url_demo && p.url_demo !== '#') {
+          html += '<a href="' + escapeHtml(p.url_demo) + '" target="_blank" rel="noopener" class="btn-primary" style="padding:8px 14px; font-size:0.82rem;">Lihat Demo</a>';
+        }
+        if (p.url_repo && p.url_repo !== '#') {
+          html += '<a href="' + escapeHtml(p.url_repo) + '" target="_blank" rel="noopener" class="btn-secondary" style="padding:8px 14px; font-size:0.82rem;">Source Code</a>';
+        }
+        html += '</div>';
+        html += '</article>';
+      }
+      box.innerHTML = html;
+    }
+
+    function renderKontakPublik() {
+      var box = document.getElementById('render-kontak-info');
+      var list = STATE.dataPublik.kontak || [];
+      if (list.length === 0) {
+        box.innerHTML = '<p style="color:var(--text-muted); font-size:0.9rem;">Informasi kontak belum ditambahkan oleh Admin.</p>';
+        return;
+      }
+
+      var html = '';
+      for (var i = 0; i < list.length; i++) {
+        var k = list[i];
+        html += '<div style="padding: 12px 0; border-bottom: 1px solid var(--border-glass);">';
+        html += '<div style="font-size: 0.78rem; color: var(--accent); font-weight: 700;">' + escapeHtml(k.platform) + ' - ' + escapeHtml(k.label) + '</div>';
+        if (k.url_tautan) {
+          html += '<a href="' + escapeHtml(k.url_tautan) + '" target="_blank" rel="noopener" style="font-size: 0.96rem; font-weight: 600;">' + escapeHtml(k.nilai_kontak) + '</a>';
+        } else {
+          html += '<div style="font-size: 0.96rem; font-weight: 600;">' + escapeHtml(k.nilai_kontak) + '</div>';
+        }
+        html += '</div>';
+      }
+      box.innerHTML = html;
+    }
+
+    function kirimPesanPengunjung() {
+      var payload = {
+        action: 'kirim_pesan',
+        nama_pengirim: String(document.getElementById('msg-nama').value || '').trim(),
+        email_pengirim: String(document.getElementById('msg-email').value || '').trim(),
+        subjek: String(document.getElementById('msg-subjek').value || '').trim(),
+        isi_pesan: String(document.getElementById('msg-isi').value || '').trim()
+      };
+
+      fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (json) {
+          if (json && json.sukses) {
+            tampilToast('Pesan berhasil terkirim ke Admin!');
+            document.getElementById('msg-nama').value = '';
+            document.getElementById('msg-email').value = '';
+            document.getElementById('msg-subjek').value = '';
+            document.getElementById('msg-isi').value = '';
+          } else {
+            tampilToast((json && json.pesan) || 'Gagal mengirim pesan.', true);
+          }
+        })
+        .catch(function () {
+          tampilToast('Koneksi server belum aktif.', true);
+        });
+    }
+
+    // =========================================================================
+    // LOGIN & PANEL ADMIN (EKSKLUSIF LAPTOP >= 1024px)
+    // =========================================================================
+    function bukaModalLogin() {
+      if (deteksiPerangkat() === 'mobile') {
+        return;
+      }
+      if (STATE.tokenAdmin) {
+        bukaWorkspaceAdmin();
+        return;
+      }
+      document.getElementById('modal-login-admin').classList.add('active');
+    }
+
+    function tutupModalLogin() {
+      document.getElementById('modal-login-admin').classList.remove('active');
+    }
+
+    function prosesLoginAdmin() {
+      if (deteksiPerangkat() === 'mobile') return;
+      var username = String(document.getElementById('login-username').value || '').trim();
+      var password = String(document.getElementById('login-password').value || '').trim();
+
+      fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'login',
+          username: username,
+          password: password,
+          tipe_perangkat: deteksiPerangkat()
+        })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (json) {
+          if (json && json.sukses && json.token) {
+            STATE.tokenAdmin = json.token;
+            localStorage.setItem('portofolio_admin_token', json.token);
+            tutupModalLogin();
+            tampilToast('Login Admin berhasil!');
+            bukaWorkspaceAdmin();
+          } else {
+            tampilToast((json && json.pesan) || 'Login gagal.', true);
+          }
+        })
+        .catch(function () {
+          tampilToast('Gagal terhubung ke server API.', true);
+        });
+    }
+
+    function bukaWorkspaceAdmin() {
+      if (deteksiPerangkat() === 'mobile') return;
+      document.getElementById('admin-workspace').classList.add('active');
+      muatDashboardAdmin();
+    }
+
+    function lihatTampilanPengunjung() {
+      document.getElementById('admin-workspace').classList.remove('active');
+      muatDataPublik();
+    }
+
+    function logoutAdmin() {
+      STATE.tokenAdmin = '';
+      localStorage.removeItem('portofolio_admin_token');
+      document.getElementById('admin-workspace').classList.remove('active');
+      tampilToast('Anda telah keluar dari Panel Admin.');
+      muatDataPublik();
+    }
+
+    function muatDashboardAdmin() {
+      fetch(API_ENDPOINT + '?action=admin_dashboard', {
+        headers: { 'x-admin-token': STATE.tokenAdmin }
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (json) {
+          if (json && json.sukses) {
+            STATE.adminData.statistik = json.statistik;
+            STATE.adminData.konten = json.konten;
+            renderTabAdmin();
+          } else {
+            logoutAdmin();
+          }
+        })
+        .catch(function () {
+          renderTabAdmin();
+        });
+    }
+
+    function gantiTabAdmin(tab) {
+      STATE.tabAdmin = tab;
+      var btns = document.querySelectorAll('.admin-menu-btn');
+      for (var i = 0; i < btns.length; i++) {
+        if (btns[i].getAttribute('data-tab') === tab) {
+          btns[i].classList.add('active');
+        } else {
+          btns[i].classList.remove('active');
+        }
+      }
+      renderTabAdmin();
+    }
+
+    function kirimCrudAdmin(modul, operasi, payload, onSuccess) {
+      fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': STATE.tokenAdmin
+        },
+        body: JSON.stringify({
+          action: 'admin_crud',
+          modul: modul,
+          operasi: operasi,
+          payload: payload
+        })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (json) {
+          if (json && json.sukses) {
+            tampilToast('Perubahan berhasil disimpan ke Neon DB!');
+            if (typeof onSuccess === 'function') onSuccess(json);
+            muatDashboardAdmin();
+            muatDataPublik();
+          } else {
+            tampilToast((json && json.pesan) || 'Gagal menyimpan data.', true);
+          }
+        })
+        .catch(function () {
+          tampilToast('Terjadi gangguan jaringan ke server.', true);
+        });
+    }
+
+    // =========================================================================
+    // RENDER KONTEN SETIAP TAB DI PANEL ADMIN
+    // =========================================================================
+    function renderTabAdmin() {
+      var area = document.getElementById('admin-content-area');
+      var tab = STATE.tabAdmin;
+
+      if (tab === 'stats') {
+        var st = STATE.adminData.statistik;
+        var mobCount = 0;
+        var deskCount = 0;
+        for (var i = 0; i < st.perangkat.length; i++) {
+          if (st.perangkat[i].tipe_perangkat === 'mobile') mobCount = st.perangkat[i].jumlah;
+          if (st.perangkat[i].tipe_perangkat === 'desktop') deskCount = st.perangkat[i].jumlah;
+        }
+
+        var html = '<h2 style="margin-bottom:6px;">Progres & Analitik Pengunjung</h2>';
+        html += '<p style="color:var(--text-muted); margin-bottom:22px;">Pantau jumlah tayangan halaman, pengunjung unik, dan perangkat yang digunakan.</p>';
+        html += '<div class="stat-grid">';
+        html += '<div class="stat-card"><div style="font-size:0.82rem; color:var(--text-muted);">Total Halaman Dilihat</div><div class="stat-val">' + st.total_views + '</div></div>';
+        html += '<div class="stat-card"><div style="font-size:0.82rem; color:var(--text-muted);">Pengunjung Unik</div><div class="stat-val">' + st.pengunjung_unik + '</div></div>';
+        html += '<div class="stat-card"><div style="font-size:0.82rem; color:var(--text-muted);">Akses via HP (Android/iOS)</div><div class="stat-val">' + mobCount + '</div></div>';
+        html += '<div class="stat-card"><div style="font-size:0.82rem; color:var(--text-muted);">Akses via Laptop/Desktop</div><div class="stat-val">' + deskCount + '</div></div>';
+        html += '</div>';
+
+        html += '<div class="grid-2">';
+        html += '<div class="glass-card"><h3 style="margin-bottom:14px;">Menu Paling Sering Dibuka</h3>';
+        for (var m = 0; m < st.menu_populer.length; m++) {
+          var mp = st.menu_populer[m];
+          html += '<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border-glass);">';
+          html += '<span style="text-transform:capitalize; font-weight:600;">' + escapeHtml(mp.halaman_dikunjungi) + '</span>';
+          html += '<span style="color:var(--accent); font-weight:700;">' + mp.jumlah + ' views</span>';
+          html += '</div>';
+        }
+        html += '</div>';
+
+        html += '<div class="glass-card"><h3 style="margin-bottom:14px;">Log Kunjungan Terbaru (WIB)</h3>';
+        html += '<table class="data-table"><thead><tr><th>Menu</th><th>Perangkat</th><th>Waktu</th></tr></thead><tbody>';
+        for (var l = 0; l < st.log_terbaru.length; l++) {
+          var lg = st.log_terbaru[l];
+          html += '<tr><td>' + escapeHtml(lg.halaman_dikunjungi) + '</td><td>' + escapeHtml(lg.tipe_perangkat) + '</td><td>' + escapeHtml(lg.waktu_kunjung) + '</td></tr>';
+        }
+        html += '</tbody></table></div>';
+        html += '</div>';
+        area.innerHTML = html;
+        return;
+      }
+
+      if (tab === 'beranda') {
+        var b = (STATE.adminData.konten.beranda && STATE.adminData.konten.beranda[0]) || {};
+        var htmlB = '<h2 style="margin-bottom:18px;">Kelola Menu Beranda</h2>';
+        htmlB += '<div class="glass-card" style="max-width:720px;">';
+        htmlB += '<form onsubmit="event.preventDefault(); simpanBerandaAdmin(' + (b.id || 'null') + ');">';
+        htmlB += '<div class="form-group"><label class="form-label">Judul Utama (Headline)</label><input type="text" id="adm-b-headline" class="input-field" required value="' + escapeHtml(b.headline || '') + '" /></div>';
+        htmlB += '<div class="form-group"><label class="form-label">Sub-Judul (Role / Keahlian)</label><input type="text" id="adm-b-sub" class="input-field" required value="' + escapeHtml(b.subheadline || '') + '" /></div>';
+        htmlB += '<div class="form-group"><label class="form-label">Deskripsi Singkat</label><textarea id="adm-b-desc" class="input-field" rows="3" required>' + escapeHtml(b.deskripsi_singkat || '') + '</textarea></div>';
+        htmlB += '<div class="form-group"><label class="form-label">Foto Profil (Tempel URL atau Pilih File dari Laptop)</label>';
+        htmlB += '<input type="text" id="adm-b-foto" class="input-field" style="margin-bottom:8px;" value="' + escapeHtml(b.url_foto_profil || '') + '" placeholder="https://..." />';
+        htmlB += '<input type="file" accept="image/*" onchange="kompresGambarFile(this.files[0], function(url){ document.getElementById(\'adm-b-foto\').value = url; tampilToast(\'Foto siap disimpan!\'); })" /></div>';
+        htmlB += '<div class="form-group"><label class="form-label">Teks Tombol Utama</label><input type="text" id="adm-b-cta" class="input-field" value="' + escapeHtml(b.teks_tombol_cta || 'Lihat Proyek Saya') + '" /></div>';
+        htmlB += '<div class="form-group"><label class="form-label">Link Unduh CV (Opsional)</label><input type="text" id="adm-b-cv" class="input-field" value="' + escapeHtml(b.url_cv || '') + '" placeholder="https://drive.google.com/..." /></div>';
+        htmlB += '<button type="submit" class="btn-primary">Simpan Perubahan Beranda</button>';
+        htmlB += '</form></div>';
+        area.innerHTML = htmlB;
+        return;
+      }
+
+      if (tab === 'tentang') {
+        var listT = STATE.adminData.konten.tentang || [];
+        var htmlT = '<h2 style="margin-bottom:18px;">Kelola Menu Tentang Saya</h2>';
+        htmlT += '<div class="grid-2">';
+        htmlT += '<div class="glass-card"><h3 style="margin-bottom:14px;">Tambah / Edit Item</h3>';
+        htmlT += '<form onsubmit="event.preventDefault(); simpanTentangAdmin();">';
+        htmlT += '<input type="hidden" id="adm-t-id" value="" />';
+        htmlT += '<div class="form-group"><label class="form-label">Kategori</label><select id="adm-t-kat" class="input-field"><option value="bio">Biografi / Pendidikan</option><option value="skill">Keahlian (Skill Bar)</option></select></div>';
+        htmlT += '<div class="form-group"><label class="form-label">Judul / Nama Keahlian</label><input type="text" id="adm-t-judul" class="input-field" required /></div>';
+        htmlT += '<div class="form-group"><label class="form-label">Deskripsi (Untuk Biografi)</label><textarea id="adm-t-desc" class="input-field" rows="3"></textarea></div>';
+        htmlT += '<div class="form-group"><label class="form-label">Persentase Skill (0 - 100)</label><input type="number" id="adm-t-persen" class="input-field" min="0" max="100" value="85" /></div>';
+        htmlT += '<button type="submit" class="btn-primary">Simpan Data</button></form></div>';
+
+        htmlT += '<div class="glass-card"><h3 style="margin-bottom:14px;">Daftar Konten Aktif</h3>';
+        for (var i = 0; i < listT.length; i++) {
+          var it = listT[i];
+          htmlT += '<div style="padding:12px 0; border-bottom:1px solid var(--border-glass); display:flex; justify-content:space-between; align-items:center;">';
+          htmlT += '<div><strong>' + escapeHtml(it.judul) + '</strong><div style="font-size:0.78rem; color:var(--accent);">Kategori: ' + escapeHtml(it.kategori) + '</div></div>';
+          htmlT += '<div><button type="button" class="btn-sm" onclick="editTentang(' + i + ')">Edit</button>';
+          htmlT += '<button type="button" class="btn-sm btn-danger-sm" onclick="hapusItemAdmin(\'tentang\',' + it.id + ')">Hapus</button></div>';
+          htmlT += '</div>';
+        }
+        htmlT += '</div></div>';
+        area.innerHTML = htmlT;
+        return;
+      }
+
+      if (tab === 'pekerjaan') {
+        var listK = STATE.adminData.konten.pekerjaan || [];
+        var htmlK = '<h2 style="margin-bottom:18px;">Kelola Menu Pekerjaan</h2>';
+        htmlK += '<div class="grid-2">';
+        htmlK += '<div class="glass-card"><h3 style="margin-bottom:14px;">Tambah / Edit Pekerjaan</h3>';
+        htmlK += '<form onsubmit="event.preventDefault(); simpanPekerjaanAdmin();">';
+        htmlK += '<input type="hidden" id="adm-k-id" value="" />';
+        htmlK += '<div class="form-group"><label class="form-label">Posisi / Jabatan</label><input type="text" id="adm-k-posisi" class="input-field" required /></div>';
+        htmlK += '<div class="form-group"><label class="form-label">Nama Perusahaan / Instansi</label><input type="text" id="adm-k-perusahaan" class="input-field" required /></div>';
+        htmlK += '<div class="form-group"><label class="form-label">Lokasi</label><input type="text" id="adm-k-lokasi" class="input-field" /></div>';
+        htmlK += '<div class="grid-2"><div class="form-group"><label class="form-label">Periode Mulai</label><input type="text" id="adm-k-mulai" class="input-field" required placeholder="Jan 2024" /></div>';
+        htmlK += '<div class="form-group"><label class="form-label">Periode Selesai</label><input type="text" id="adm-k-selesai" class="input-field" value="Sekarang" /></div></div>';
+        htmlK += '<div class="form-group"><label class="form-label">Deskripsi Tugas</label><textarea id="adm-k-tugas" class="input-field" rows="3" required></textarea></div>';
+        htmlK += '<button type="submit" class="btn-primary">Simpan Pekerjaan</button></form></div>';
+
+        htmlK += '<div class="glass-card"><h3 style="margin-bottom:14px;">Daftar Pengalaman Kerja</h3>';
+        for (var j = 0; j < listK.length; j++) {
+          var pk = listK[j];
+          htmlK += '<div style="padding:12px 0; border-bottom:1px solid var(--border-glass); display:flex; justify-content:space-between; align-items:center;">';
+          htmlK += '<div><strong>' + escapeHtml(pk.posisi) + '</strong><div style="font-size:0.8rem; color:var(--text-muted);">' + escapeHtml(pk.nama_perusahaan) + '</div></div>';
+          htmlK += '<div><button type="button" class="btn-sm" onclick="editPekerjaan(' + j + ')">Edit</button>';
+          htmlK += '<button type="button" class="btn-sm btn-danger-sm" onclick="hapusItemAdmin(\'pekerjaan\',' + pk.id + ')">Hapus</button></div>';
+          htmlK += '</div>';
+        }
+        htmlK += '</div></div>';
+        area.innerHTML = htmlK;
+        return;
+      }
+
+      if (tab === 'proyek') {
+        var listP = STATE.adminData.konten.proyek || [];
+        var htmlP = '<h2 style="margin-bottom:18px;">Kelola Menu Proyek (Upload Postingan Portofolio)</h2>';
+        htmlP += '<div class="grid-2">';
+        htmlP += '<div class="glass-card"><h3 style="margin-bottom:14px;">Unggah / Edit Postingan Proyek</h3>';
+        htmlP += '<form onsubmit="event.preventDefault(); simpanProyekAdmin();">';
+        htmlP += '<input type="hidden" id="adm-p-id" value="" />';
+        htmlP += '<div class="form-group"><label class="form-label">Judul Proyek</label><input type="text" id="adm-p-judul" class="input-field" required /></div>';
+        htmlP += '<div class="form-group"><label class="form-label">Kategori Proyek</label><input type="text" id="adm-p-kat" class="input-field" required placeholder="Web App / Mobile / Desain" /></div>';
+        htmlP += '<div class="form-group"><label class="form-label">Ringkasan Proyek</label><textarea id="adm-p-ringkasan" class="input-field" rows="3" required></textarea></div>';
+        htmlP += '<div class="form-group"><label class="form-label">Gambar Thumbnail (URL atau Upload dari Laptop)</label>';
+        htmlP += '<input type="text" id="adm-p-thumb" class="input-field" style="margin-bottom:8px;" placeholder="https://..." />';
+        htmlP += '<input type="file" accept="image/*" onchange="kompresGambarFile(this.files[0], function(url){ document.getElementById(\'adm-p-thumb\').value = url; tampilToast(\'Thumbnail siap diupload!\'); })" /></div>';
+        htmlP += '<div class="form-group"><label class="form-label">Teknologi Dipakai (pisahkan dengan koma)</label><input type="text" id="adm-p-tekno" class="input-field" placeholder="HTML, CSS, JavaScript, Neon DB" /></div>';
+        htmlP += '<div class="grid-2"><div class="form-group"><label class="form-label">Link Live Demo</label><input type="text" id="adm-p-demo" class="input-field" placeholder="https://..." /></div>';
+        htmlP += '<div class="form-group"><label class="form-label">Link Repository / Github</label><input type="text" id="adm-p-repo" class="input-field" placeholder="https://github.com/..." /></div></div>';
+        htmlP += '<button type="submit" class="btn-primary">Publikasikan Proyek</button></form></div>';
+
+        htmlP += '<div class="glass-card"><h3 style="margin-bottom:14px;">Daftar Postingan Proyek</h3>';
+        for (var p = 0; p < listP.length; p++) {
+          var pr = listP[p];
+          htmlP += '<div style="padding:12px 0; border-bottom:1px solid var(--border-glass); display:flex; justify-content:space-between; align-items:center;">';
+          htmlP += '<div><strong>' + escapeHtml(pr.judul_proyek) + '</strong><div style="font-size:0.78rem; color:var(--accent);">' + escapeHtml(pr.kategori_proyek) + '</div></div>';
+          htmlP += '<div><button type="button" class="btn-sm" onclick="editProyek(' + p + ')">Edit</button>';
+          htmlP += '<button type="button" class="btn-sm btn-danger-sm" onclick="hapusItemAdmin(\'proyek\',' + pr.id + ')">Hapus</button></div>';
+          htmlP += '</div>';
+        }
+        htmlP += '</div></div>';
+        area.innerHTML = htmlP;
+        return;
+      }
+
+      if (tab === 'kontak') {
+        var infoK = STATE.adminData.konten.kontak_info || [];
+        var pesanM = STATE.adminData.konten.pesan_masuk || [];
+        var htmlC = '<h2 style="margin-bottom:18px;">Kelola Kontak & Pesan Masuk</h2>';
+        htmlC += '<div class="grid-2">';
+        htmlC += '<div class="glass-card"><h3 style="margin-bottom:14px;">Tambah Info Kontak Publik</h3>';
+        htmlC += '<form onsubmit="event.preventDefault(); simpanKontakInfoAdmin();">';
+        htmlC += '<div class="form-group"><label class="form-label">Platform (Email / WhatsApp / LinkedIn / Instagram)</label><input type="text" id="adm-c-plat" class="input-field" required /></div>';
+        htmlC += '<div class="form-group"><label class="form-label">Label Tampilan</label><input type="text" id="adm-c-label" class="input-field" required placeholder="WhatsApp Bisnis" /></div>';
+        htmlC += '<div class="form-group"><label class="form-label">Nilai Kontak</label><input type="text" id="adm-c-nilai" class="input-field" required placeholder="0812..." /></div>';
+        htmlC += '<div class="form-group"><label class="form-label">URL Tautan (Opsional)</label><input type="text" id="adm-c-url" class="input-field" placeholder="https://wa.me/62..." /></div>';
+        htmlC += '<button type="submit" class="btn-primary">Simpan Kontak</button></form>';
+        htmlC += '<div style="margin-top:18px;">';
+        for (var ci = 0; ci < infoK.length; ci++) {
+          htmlC += '<div style="padding:10px 0; border-bottom:1px solid var(--border-glass); display:flex; justify-content:space-between;">';
+          htmlC += '<span><strong>' + escapeHtml(infoK[ci].platform) + ':</strong> ' + escapeHtml(infoK[ci].nilai_kontak) + '</span>';
+          htmlC += '<button type="button" class="btn-sm btn-danger-sm" onclick="hapusItemAdmin(\'kontak_info\',' + infoK[ci].id + ')">Hapus</button>';
+          htmlC += '</div>';
+        }
+        htmlC += '</div></div>';
+
+        htmlC += '<div class="glass-card"><h3 style="margin-bottom:14px;">Kotak Masuk dari Pengunjung</h3>';
+        if (pesanM.length === 0) {
+          htmlC += '<p style="color:var(--text-muted); font-size:0.9rem;">Belum ada pesan masuk dari pengunjung.</p>';
+        } else {
+          for (var pm = 0; pm < pesanM.length; pm++) {
+            var msg = pesanM[pm];
+            htmlC += '<div style="padding:12px; background:rgba(11,15,25,0.6); border-radius:12px; margin-bottom:10px;">';
+            htmlC += '<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--accent);"><span>' + escapeHtml(msg.nama_pengirim) + ' (' + escapeHtml(msg.email_pengirim) + ')</span><span>' + escapeHtml(msg.waktu_kirim) + '</span></div>';
+            htmlC += '<div style="font-weight:700; margin:4px 0;">' + escapeHtml(msg.subjek) + '</div>';
+            htmlC += '<p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:8px;">' + escapeHtml(msg.isi_pesan) + '</p>';
+            htmlC += '<button type="button" class="btn-sm btn-danger-sm" onclick="hapusItemAdmin(\'kontak_pesan\',' + msg.id + ')">Hapus Pesan</button>';
+            htmlC += '</div>';
+          }
+        }
+        htmlC += '</div></div>';
+        area.innerHTML = htmlC;
+        return;
+      }
+
+      if (tab === 'akun') {
+        var htmlA = '<h2 style="margin-bottom:18px;">Pengaturan Akun Login Admin</h2>';
+        htmlA += '<div class="glass-card" style="max-width:480px;">';
+        htmlA += '<form onsubmit="event.preventDefault(); simpanAkunAdmin();">';
+        htmlA += '<div class="form-group"><label class="form-label">Nama Tampilan Admin</label><input type="text" id="adm-u-nama" class="input-field" required value="Administrator Portofolio" /></div>';
+        htmlA += '<div class="form-group"><label class="form-label">Username Login Baru</label><input type="text" id="adm-u-user" class="input-field" required value="admin" /></div>';
+        htmlA += '<div class="form-group"><label class="form-label">Password Baru (Kosongkan jika tidak ingin diubah)</label><input type="password" id="adm-u-pass" class="input-field" placeholder="Masukkan password baru..." /></div>';
+        htmlA += '<button type="submit" class="btn-primary">Perbarui Kredensial</button>';
+        htmlA += '</form></div>';
+        area.innerHTML = htmlA;
+      }
+    }
+
+    // =========================================================================
+    // AKSI SIMPAN & EDIT PER MODUL ADMIN
+    // =========================================================================
+    function simpanBerandaAdmin(id) {
+      kirimCrudAdmin('beranda', 'simpan', {
+        id: id,
+        headline: String(document.getElementById('adm-b-headline').value || '').trim(),
+        subheadline: String(document.getElementById('adm-b-sub').value || '').trim(),
+        deskripsi_singkat: String(document.getElementById('adm-b-desc').value || '').trim(),
+        url_foto_profil: String(document.getElementById('adm-b-foto').value || '').trim(),
+        teks_tombol_cta: String(document.getElementById('adm-b-cta').value || '').trim(),
+        url_cv: String(document.getElementById('adm-b-cv').value || '').trim()
+      });
+    }
+
+    function editTentang(idx) {
+      var item = STATE.adminData.konten.tentang[idx];
+      if (!item) return;
+      document.getElementById('adm-t-id').value = item.id;
+      document.getElementById('adm-t-kat').value = item.kategori;
+      document.getElementById('adm-t-judul').value = item.judul;
+      document.getElementById('adm-t-desc').value = item.deskripsi || '';
+      document.getElementById('adm-t-persen').value = item.persentase_skill || 80;
+    }
+
+    function simpanTentangAdmin() {
+      var idVal = document.getElementById('adm-t-id').value;
+      kirimCrudAdmin('tentang', 'simpan', {
+        id: idVal ? Number(idVal) : null,
+        kategori: String(document.getElementById('adm-t-kat').value),
+        judul: String(document.getElementById('adm-t-judul').value || '').trim(),
+        deskripsi: String(document.getElementById('adm-t-desc').value || '').trim(),
+        persentase_skill: Number(document.getElementById('adm-t-persen').value) || 0,
+        urutan: 1
+      });
+    }
+
+    function editPekerjaan(idx) {
+      var item = STATE.adminData.konten.pekerjaan[idx];
+      if (!item) return;
+      document.getElementById('adm-k-id').value = item.id;
+      document.getElementById('adm-k-posisi').value = item.posisi;
+      document.getElementById('adm-k-perusahaan').value = item.nama_perusahaan;
+      document.getElementById('adm-k-lokasi').value = item.lokasi || '';
+      document.getElementById('adm-k-mulai').value = item.periode_mulai;
+      document.getElementById('adm-k-selesai').value = item.periode_selesai;
+      document.getElementById('adm-k-tugas').value = item.deskripsi_tugas;
+    }
+
+    function simpanPekerjaanAdmin() {
+      var idVal = document.getElementById('adm-k-id').value;
+      kirimCrudAdmin('pekerjaan', 'simpan', {
+        id: idVal ? Number(idVal) : null,
+        posisi: String(document.getElementById('adm-k-posisi').value || '').trim(),
+        nama_perusahaan: String(document.getElementById('adm-k-perusahaan').value || '').trim(),
+        lokasi: String(document.getElementById('adm-k-lokasi').value || '').trim(),
+        periode_mulai: String(document.getElementById('adm-k-mulai').value || '').trim(),
+        periode_selesai: String(document.getElementById('adm-k-selesai').value || '').trim(),
+        deskripsi_tugas: String(document.getElementById('adm-k-tugas').value || '').trim(),
+        status_tampil: true
+      });
+    }
+
+    function editProyek(idx) {
+      var item = STATE.adminData.konten.proyek[idx];
+      if (!item) return;
+      document.getElementById('adm-p-id').value = item.id;
+      document.getElementById('adm-p-judul').value = item.judul_proyek;
+      document.getElementById('adm-p-kat').value = item.kategori_proyek;
+      document.getElementById('adm-p-ringkasan').value = item.ringkasan;
+      document.getElementById('adm-p-thumb').value = item.url_thumbnail || '';
+      document.getElementById('adm-p-tekno').value = item.teknologi_dipakai || '';
+      document.getElementById('adm-p-demo').value = item.url_demo || '';
+      document.getElementById('adm-p-repo').value = item.url_repo || '';
+    }
+
+    function simpanProyekAdmin() {
+      var idVal = document.getElementById('adm-p-id').value;
+      kirimCrudAdmin('proyek', 'simpan', {
+        id: idVal ? Number(idVal) : null,
+        judul_proyek: String(document.getElementById('adm-p-judul').value || '').trim(),
+        kategori_proyek: String(document.getElementById('adm-p-kat').value || '').trim(),
+        ringkasan: String(document.getElementById('adm-p-ringkasan').value || '').trim(),
+        url_thumbnail: String(document.getElementById('adm-p-thumb').value || '').trim(),
+        teknologi_dipakai: String(document.getElementById('adm-p-tekno').value || '').trim(),
+        url_demo: String(document.getElementById('adm-p-demo').value || '').trim(),
+        url_repo: String(document.getElementById('adm-p-repo').value || '').trim(),
+        status_tampil: true
+      });
+    }
+
+    function simpanKontakInfoAdmin() {
+      kirimCrudAdmin('kontak_info', 'simpan', {
+        platform: String(document.getElementById('adm-c-plat').value || '').trim(),
+        label: String(document.getElementById('adm-c-label').value || '').trim(),
+        nilai_kontak: String(document.getElementById('adm-c-nilai').value || '').trim(),
+        url_tautan: String(document.getElementById('adm-c-url').value || '').trim()
+      });
+    }
+
+    function simpanAkunAdmin() {
+      kirimCrudAdmin('akun_admin', 'simpan', {
+        nama_tampilan: String(document.getElementById('adm-u-nama').value || '').trim(),
+        username: String(document.getElementById('adm-u-user').value || '').trim(),
+        password_baru: String(document.getElementById('adm-u-pass').value || '').trim()
+      });
+    }
+
+    function hapusItemAdmin(modul, id) {
+      bukaConfirm('Data ini akan dihapus permanen dari database Neon. Lanjutkan?', function () {
+        kirimCrudAdmin(modul, 'hapus', { id: Number(id) });
+      });
+    }
+
+    // =========================================================================
+    // INISIALISASI SAAT HALAMAN PERTAMA KALI DIBUKA
+    // =========================================================================
+    document.addEventListener('DOMContentLoaded', function () {
+      jagaKeamananPerangkat();
+      muatDataPublik();
+      catatKunjungan('beranda');
+    });
+  </script>
+</body>
+</html>
