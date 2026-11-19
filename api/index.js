@@ -23,7 +23,7 @@ function formatWaktuJakarta(dateInput) {
   return map.day + '/' + map.month + '/' + map.year + ' ' + map.hour + ':' + map.minute + ':' + map.second;
 }
 
-// Membuat token sesi login admin
+// Membuat token sesi login admin berbasis HMAC-SHA256
 function buatTokenAdmin(adminId, username) {
   const secret = process.env.DATABASE_URL || 'zettbot-portofolio-secret';
   const payload = String(adminId) + ':' + String(username);
