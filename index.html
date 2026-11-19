@@ -2,24 +2,37 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portofolio Pribadi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Portofolio Pribadi — Neon CMS</title>
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Font Awesome 6 untuk Ikon Modern -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
   <style>
+    /* =========================================================================
+       1. DESIGN TOKENS & ZETTBOS DARK NEON THEME
+       ========================================================================= */
     :root {
       --bg-main: #0b0f19;
       --bg-card: #151b26;
       --bg-glass: rgba(21, 27, 38, 0.78);
+      --bg-glass-hover: rgba(28, 37, 52, 0.9);
       --border-glass: rgba(255, 255, 255, 0.08);
+      --border-neon: rgba(0, 255, 170, 0.35);
       --accent: #00ffaa;
-      --accent-dim: rgba(0, 255, 170, 0.14);
+      --accent-dim: rgba(0, 255, 170, 0.13);
       --accent-hover: #00e096;
+      --accent-cyan: #38bdf8;
+      --accent-amber: #fbbf24;
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
       --danger: #ff5c7c;
-      --warning: #fbbf24;
+      --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.42);
+      --shadow-glow: 0 0 26px rgba(0, 255, 170, 0.16);
+      --transition: all 0.24s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     * {
@@ -36,8 +49,8 @@
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--bg-main);
       background-image:
-        radial-gradient(circle at 15% 10%, rgba(0, 255, 170, 0.08), transparent 35%),
-        radial-gradient(circle at 85% 80%, rgba(56, 189, 248, 0.07), transparent 40%);
+        radial-gradient(circle at 14% 10%, rgba(0, 255, 170, 0.08), transparent 36%),
+        radial-gradient(circle at 86% 82%, rgba(56, 189, 248, 0.07), transparent 40%);
       color: var(--text-main);
       line-height: 1.6;
       min-height: 100vh;
@@ -53,9 +66,13 @@
       font-family: inherit;
     }
 
-    /* =====================================================================
-       ATURAN PEMISAH TAMPILAN HP (ANDROID/iOS < 1024px) VS LAPTOP (>= 1024px)
-       ===================================================================== */
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* =========================================================================
+       2. PEMISAH TAMPILAN HP (ANDROID/iOS < 1024px) VS LAPTOP (>= 1024px)
+       ========================================================================= */
     .desktop-only {
       display: none !important;
     }
@@ -64,7 +81,7 @@
       display: block;
     }
 
-    /* Tombol & Panel Admin DIBLOKIR TOTAL di layar HP (< 1024px) */
+    /* KEAMANAN MUTLAK: Tombol & Workspace Admin disembunyikan total di HP */
     #btn-open-login,
     #modal-login-admin,
     #admin-workspace {
@@ -74,9 +91,6 @@
     @media (min-width: 1024px) {
       .desktop-only {
         display: flex !important;
-      }
-      .desktop-block {
-        display: block !important;
       }
       .mobile-only {
         display: none !important;
@@ -92,14 +106,14 @@
       }
     }
 
-    /* =====================================================================
-       NAVIGASI LAPTOP (TOP GLASS NAVBAR)
-       ===================================================================== */
+    /* =========================================================================
+       3. NAVIGASI LAPTOP (TOP GLASS NAVBAR)
+       ========================================================================= */
     .top-navbar {
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(11, 15, 25, 0.82);
+      background: rgba(11, 15, 25, 0.84);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border-glass);
@@ -116,6 +130,7 @@
       font-weight: 800;
       font-size: 1.15rem;
       letter-spacing: -0.02em;
+      cursor: pointer;
     }
 
     .brand-dot {
@@ -141,7 +156,7 @@
       font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.22s ease;
+      transition: var(--transition);
     }
 
     .nav-btn:hover {
@@ -166,18 +181,18 @@
       cursor: pointer;
       align-items: center;
       gap: 8px;
-      transition: all 0.22s ease;
+      transition: var(--transition);
     }
 
     .btn-admin-trigger:hover {
       border-color: var(--accent);
       color: var(--accent);
-      box-shadow: 0 0 15px rgba(0, 255, 170, 0.18);
+      box-shadow: 0 0 15px rgba(0, 255, 170, 0.2);
     }
 
-    /* =====================================================================
-       NAVIGASI HP ANDROID / iOS (HEADER RINGKAS + BOTTOM APP BAR)
-       ===================================================================== */
+    /* =========================================================================
+       4. NAVIGASI HP ANDROID / iOS (HEADER RINGKAS + FLOATING BOTTOM APP BAR)
+       ========================================================================= */
     .mobile-top-bar {
       position: sticky;
       top: 0;
@@ -197,10 +212,10 @@
 
     .mobile-status-pill {
       font-size: 0.72rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--accent);
       background: var(--accent-dim);
-      padding: 4px 10px;
+      padding: 4px 11px;
       border-radius: 999px;
       border: 1px solid rgba(0, 255, 170, 0.25);
     }
@@ -211,13 +226,13 @@
       left: 12px;
       right: 12px;
       z-index: 60;
-      background: rgba(21, 27, 38, 0.92);
+      background: rgba(21, 27, 38, 0.94);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 20px;
       padding: 8px 6px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.58);
     }
 
     .mobile-bottom-grid {
@@ -240,12 +255,11 @@
       font-size: 0.68rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: var(--transition);
     }
 
-    .mob-nav-item svg {
-      width: 19px;
-      height: 19px;
+    .mob-nav-item i {
+      font-size: 1rem;
     }
 
     .mob-nav-item.active {
@@ -253,13 +267,13 @@
       background: var(--accent-dim);
     }
 
-    /* =====================================================================
-       KONTAINER KONTEN PENGUNJUNG (5 MENU)
-       ===================================================================== */
+    /* =========================================================================
+       5. KONTAINER KONTEN PENGUNJUNG (READ-ONLY)
+       ========================================================================= */
     .visitor-container {
       max-width: 1160px;
       margin: 0 auto;
-      padding: 24px 18px 105px 18px;
+      padding: 24px 18px 108px 18px;
     }
 
     @media (min-width: 1024px) {
@@ -289,15 +303,18 @@
       border: 1px solid var(--border-glass);
       border-radius: 20px;
       padding: 22px;
-      transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+      box-shadow: var(--shadow-card);
+      transition: var(--transition);
     }
 
     .glass-card:hover {
-      border-color: rgba(0, 255, 170, 0.28);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      background: var(--bg-glass-hover);
+      border-color: var(--border-neon);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow), var(--shadow-card);
     }
 
-    /* HERO BERANDA: MOBILE VS DESKTOP */
+    /* HERO BERANDA */
     .hero-wrapper {
       display: flex;
       flex-direction: column;
@@ -310,7 +327,7 @@
         grid-template-columns: 1.35fr 0.85fr;
         align-items: center;
         gap: 48px;
-        min-height: 68vh;
+        min-height: 66vh;
       }
     }
 
@@ -338,13 +355,13 @@
 
     @media (min-width: 1024px) {
       .hero-title {
-        font-size: 3.1rem;
+        font-size: 3.05rem;
       }
     }
 
     .hero-subtitle {
       font-size: 1.05rem;
-      color: var(--accent);
+      color: var(--accent-cyan);
       font-weight: 600;
       margin-bottom: 14px;
     }
@@ -375,7 +392,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: all 0.22s ease;
+      transition: var(--transition);
     }
 
     .btn-primary:hover {
@@ -397,7 +414,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: all 0.22s ease;
+      transition: var(--transition);
     }
 
     .btn-secondary:hover {
@@ -409,14 +426,15 @@
       position: relative;
       border-radius: 24px;
       overflow: hidden;
-      border: 1px solid rgba(0, 255, 170, 0.25);
+      border: 1px solid rgba(0, 255, 170, 0.28);
       background: var(--bg-card);
       aspect-ratio: 4 / 3;
+      box-shadow: var(--shadow-glow);
     }
 
     @media (min-width: 1024px) {
       .hero-photo-box {
-        aspect-ratio: 1 / 1.08;
+        aspect-ratio: 1 / 1.06;
       }
     }
 
@@ -427,7 +445,6 @@
       display: block;
     }
 
-    /* SECTION HEADERS */
     .section-head {
       margin-bottom: 24px;
     }
@@ -450,7 +467,6 @@
       margin-top: 4px;
     }
 
-    /* GRID RESPONSIF: 1 KOLOM DI HP, MULTI-KOLOM DI LAPTOP */
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr;
@@ -496,14 +512,13 @@
 
     .skill-fill {
       height: 100%;
-      background: linear-gradient(90deg, #00ffaa, #38bdf8);
+      background: linear-gradient(90deg, var(--accent), var(--accent-cyan));
       border-radius: 999px;
     }
 
-    /* TIMELINE PEKERJAAN */
     .job-badge {
       display: inline-block;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       color: var(--accent);
       background: var(--accent-dim);
@@ -512,7 +527,18 @@
       margin-bottom: 10px;
     }
 
-    /* PROYEK CARD */
+    .featured-badge {
+      display: inline-block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent-amber);
+      background: rgba(251, 191, 36, 0.14);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-left: 6px;
+    }
+
     .project-thumb {
       width: 100%;
       height: 185px;
@@ -524,15 +550,15 @@
 
     .tag-pill {
       display: inline-block;
-      font-size: 0.75rem;
-      padding: 3px 10px;
-      border-radius: 999px;
+      font-size: 0.74rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 3px 9px;
+      border-radius: 7px;
       background: rgba(255, 255, 255, 0.06);
-      color: var(--text-muted);
+      color: var(--accent-cyan);
       margin: 4px 4px 0 0;
     }
 
-    /* FILTER BAR PROYEK */
     .filter-bar {
       display: flex;
       flex-direction: column;
@@ -550,14 +576,14 @@
 
     .input-field {
       width: 100%;
-      background: rgba(11, 15, 25, 0.85);
+      background: rgba(11, 15, 25, 0.88);
       border: 1px solid var(--border-glass);
       color: var(--text-main);
       padding: 11px 14px;
       border-radius: 12px;
       font-size: 0.9rem;
       outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: var(--transition);
     }
 
     .input-field:focus {
@@ -565,14 +591,14 @@
       box-shadow: 0 0 0 3px rgba(0, 255, 170, 0.15);
     }
 
-    /* =====================================================================
-       PANEL ADMIN & MODAL LOGIN (EKSKLUSIF LAPTOP >= 1024px)
-       ===================================================================== */
+    /* =========================================================================
+       6. PANEL ADMIN & MODAL LOGIN (EKSKLUSIF LAPTOP >= 1024px)
+       ========================================================================= */
     .modal-backdrop {
       position: fixed;
       inset: 0;
       z-index: 100;
-      background: rgba(5, 8, 15, 0.82);
+      background: rgba(5, 8, 15, 0.84);
       backdrop-filter: blur(8px);
       align-items: center;
       justify-content: center;
@@ -583,7 +609,7 @@
       width: 100%;
       max-width: 420px;
       background: var(--bg-card);
-      border: 1px solid rgba(0, 255, 170, 0.28);
+      border: 1px solid rgba(0, 255, 170, 0.3);
       border-radius: 22px;
       padding: 28px;
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
@@ -598,7 +624,7 @@
     }
 
     .admin-sidebar {
-      width: 265px;
+      width: 270px;
       background: var(--bg-card);
       border-right: 1px solid var(--border-glass);
       padding: 24px 16px;
@@ -622,8 +648,8 @@
       margin-bottom: 6px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      transition: all 0.2s ease;
+      gap: 10px;
+      transition: var(--transition);
     }
 
     .admin-menu-btn:hover {
@@ -667,7 +693,7 @@
     .data-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.86rem;
+      font-size: 0.85rem;
     }
 
     .data-table th,
@@ -692,6 +718,7 @@
       color: var(--text-main);
       cursor: pointer;
       margin-right: 4px;
+      transition: var(--transition);
     }
 
     .btn-sm:hover {
@@ -709,7 +736,7 @@
       color: var(--danger);
     }
 
-    /* CUSTOM TOAST & CONFIRM MODAL */
+    /* CUSTOM TOAST & CONFIRM MODAL (TANPA ALERT/CONFIRM BAWAAN BROWSER) */
     .toast-box {
       position: fixed;
       top: 20px;
@@ -718,11 +745,11 @@
       background: #151b26;
       border: 1px solid var(--accent);
       color: var(--text-main);
-      padding: 12px 18px;
+      padding: 13px 18px;
       border-radius: 12px;
       font-size: 0.88rem;
       font-weight: 600;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
       display: none;
     }
 
@@ -735,7 +762,7 @@
       position: fixed;
       inset: 0;
       z-index: 210;
-      background: rgba(5, 8, 15, 0.8);
+      background: rgba(5, 8, 15, 0.82);
       display: none;
       align-items: center;
       justify-content: center;
@@ -766,24 +793,24 @@
 
   <!-- MODAL KONFIRMASI HAPUS KUSTOM -->
   <div id="custom-confirm" class="confirm-overlay">
-    <div class="modal-box" style="max-width: 380px;">
-      <h3 style="margin-bottom: 8px; font-size: 1.1rem;">Konfirmasi Hapus</h3>
+    <div class="modal-box" style="max-width: 390px;">
+      <h3 style="margin-bottom: 8px; font-size: 1.1rem;">Konfirmasi Penghapusan</h3>
       <p id="confirm-text" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
-        Apakah Anda yakin ingin menghapus data ini?
+        Apakah Anda yakin ingin menghapus data ini dari database Neon?
       </p>
       <div style="display: flex; justify-content: flex-end; gap: 10px;">
-        <button type="button" class="btn-secondary" onclick="tutupConfirm(false)">Batal</button>
-        <button type="button" class="btn-primary" style="background: var(--danger); color: #fff;" onclick="tutupConfirm(true)">Ya, Hapus</button>
+        <button type="button" class="btn-secondary" style="padding: 9px 16px;" onclick="tutupConfirm(false)">Batal</button>
+        <button type="button" class="btn-primary" style="background: var(--danger); color: #fff; padding: 9px 16px;" onclick="tutupConfirm(true)">Ya, Hapus</button>
       </div>
     </div>
   </div>
 
-  <!-- =====================================================================
-       HEADER KHUSUS HP (ANDROID / iOS < 1024px) - TANPA TOMBOL ADMIN
-       ===================================================================== -->
+  <!-- =======================================================================
+       HEADER KHUSUS HP (ANDROID / iOS < 1024px) — TANPA TOMBOL ADMIN
+       ======================================================================= -->
   <header class="mobile-top-bar mobile-only">
     <div class="mobile-top-inner">
-      <div class="brand-logo">
+      <div class="brand-logo" onclick="bukaMenu('beranda')">
         <span class="brand-dot"></span>
         <span>Portofolio</span>
       </div>
@@ -791,11 +818,11 @@
     </div>
   </header>
 
-  <!-- =====================================================================
-       HEADER KHUSUS LAPTOP (>= 1024px) - TERMASUK TOMBOL LOGIN ADMIN
-       ===================================================================== -->
+  <!-- =======================================================================
+       HEADER KHUSUS LAPTOP (>= 1024px) — TERMASUK TOMBOL LOGIN ADMIN
+       ======================================================================= -->
   <header class="top-navbar desktop-only">
-    <div class="brand-logo">
+    <div class="brand-logo" onclick="bukaMenu('beranda')">
       <span class="brand-dot"></span>
       <span>Portofolio Pribadi</span>
     </div>
@@ -809,13 +836,14 @@
     </nav>
 
     <button type="button" id="btn-open-login" class="btn-admin-trigger" onclick="bukaModalLogin()">
-      <span>&#128274; Login Admin</span>
+      <i class="fa-solid fa-shield-halved" style="color: var(--accent);"></i>
+      <span>Login Admin</span>
     </button>
   </header>
 
-  <!-- =====================================================================
-       AREA PENGUNJUNG (READ-ONLY DARI DATA YANG DIKELOLA ADMIN)
-       ===================================================================== -->
+  <!-- =======================================================================
+       AREA PENGUNJUNG / USER (READ-ONLY DARI DATA YANG DIKELOLA ADMIN)
+       ======================================================================= -->
   <main class="visitor-container" id="visitor-app">
 
     <!-- MENU 1: BERANDA -->
@@ -827,7 +855,7 @@
     <section id="sec-tentang" class="page-section">
       <div class="section-head">
         <h2>Tentang Saya</h2>
-        <p>Profil singkat, keahlian utama, dan latar belakang perjalanan saya.</p>
+        <p>Profil singkat, latar belakang, dan tingkat keahlian utama saya.</p>
       </div>
       <div class="grid-2" id="render-tentang"></div>
     </section>
@@ -845,12 +873,12 @@
     <section id="sec-proyek" class="page-section">
       <div class="section-head">
         <h2>Portofolio Proyek</h2>
-        <p>Kumpulan karya dan sistem yang pernah dibangun.</p>
+        <p>Kumpulan karya dan aplikasi yang telah dipublikasikan.</p>
       </div>
 
       <div class="filter-bar">
         <div id="filter-kategori-list" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
-        <div style="min-width: 240px;">
+        <div style="min-width: 250px;">
           <input type="text" id="input-cari-proyek" class="input-field" placeholder="Cari judul atau teknologi..." oninput="cariProyekHandler()" />
         </div>
       </div>
@@ -870,12 +898,12 @@
 
       <div class="grid-2">
         <div class="glass-card">
-          <h3 style="margin-bottom: 14px; font-size: 1.15rem;">Informasi Kontak</h3>
+          <h3 style="margin-bottom: 14px; font-size: 1.15rem;"><i class="fa-solid fa-address-book" style="color: var(--accent);"></i> Informasi Kontak</h3>
           <div id="render-kontak-info"></div>
         </div>
 
         <div class="glass-card">
-          <h3 style="margin-bottom: 14px; font-size: 1.15rem;">Kirim Pesan Langsung</h3>
+          <h3 style="margin-bottom: 14px; font-size: 1.15rem;"><i class="fa-solid fa-paper-plane" style="color: var(--accent-cyan);"></i> Kirim Pesan Langsung</h3>
           <form onsubmit="event.preventDefault(); kirimPesanPengunjung();">
             <div class="form-group">
               <label class="form-label">Nama Lengkap</label>
@@ -893,7 +921,7 @@
               <label class="form-label">Isi Pesan</label>
               <textarea id="msg-isi" class="input-field" rows="4" required placeholder="Tulis pesan Anda di sini..."></textarea>
             </div>
-            <button type="submit" class="btn-primary" style="width: 100%;">Kirim Pesan</button>
+            <button type="submit" class="btn-primary" style="width: 100%;">Kirim Pesan Sekarang</button>
           </form>
         </div>
       </div>
@@ -901,41 +929,41 @@
 
   </main>
 
-  <!-- =====================================================================
+  <!-- =======================================================================
        BOTTOM NAVIGATION BAR KHUSUS HP (ANDROID / iOS < 1024px)
-       ===================================================================== -->
+       ======================================================================= -->
   <nav class="mobile-bottom-nav mobile-only" aria-label="Menu Utama HP">
     <div class="mobile-bottom-grid">
       <button type="button" class="mob-nav-item active" data-menu="beranda" onclick="bukaMenu('beranda')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <i class="fa-solid fa-house"></i>
         <span>Beranda</span>
       </button>
       <button type="button" class="mob-nav-item" data-menu="tentang" onclick="bukaMenu('tentang')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        <i class="fa-solid fa-user"></i>
         <span>Tentang</span>
       </button>
       <button type="button" class="mob-nav-item" data-menu="pekerjaan" onclick="bukaMenu('pekerjaan')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        <i class="fa-solid fa-briefcase"></i>
         <span>Kerja</span>
       </button>
       <button type="button" class="mob-nav-item" data-menu="proyek" onclick="bukaMenu('proyek')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <i class="fa-solid fa-layer-group"></i>
         <span>Proyek</span>
       </button>
       <button type="button" class="mob-nav-item" data-menu="kontak" onclick="bukaMenu('kontak')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <i class="fa-solid fa-envelope"></i>
         <span>Kontak</span>
       </button>
     </div>
   </nav>
 
-  <!-- =====================================================================
-       MODAL LOGIN ADMIN (HANYA BISA MUNCUL DI LAYAR LAPTOP >= 1024px)
-       ===================================================================== -->
+  <!-- =======================================================================
+       MODAL LOGIN ADMIN (EKSKLUSIF LAPTOP >= 1024px)
+       ======================================================================= -->
   <div id="modal-login-admin" class="modal-backdrop">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-        <h3 style="font-size: 1.25rem; font-weight: 800;">Login Panel Admin</h3>
+        <h3 style="font-size: 1.25rem; font-weight: 800;"><i class="fa-solid fa-lock" style="color: var(--accent);"></i> Login Panel Admin</h3>
         <button type="button" class="btn-sm" onclick="tutupModalLogin()">&#10005;</button>
       </div>
       <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 18px;">
@@ -955,9 +983,9 @@
     </div>
   </div>
 
-  <!-- =====================================================================
+  <!-- =======================================================================
        PANEL ADMIN LENGKAP (OPERASIONAL 5 MENU & STATISTIK PENGUNJUNG)
-       ===================================================================== -->
+       ======================================================================= -->
   <div id="admin-workspace" class="admin-shell">
     <aside class="admin-sidebar">
       <div>
@@ -967,34 +995,41 @@
         </div>
 
         <button type="button" class="admin-menu-btn active" data-tab="stats" onclick="gantiTabAdmin('stats')">
-          <span>&#128202; Progres & Pengunjung</span>
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Progres & Pengunjung</span>
         </button>
         <button type="button" class="admin-menu-btn" data-tab="beranda" onclick="gantiTabAdmin('beranda')">
-          <span>&#127968; Kelola Beranda</span>
+          <i class="fa-solid fa-house-user"></i>
+          <span>Kelola Beranda</span>
         </button>
         <button type="button" class="admin-menu-btn" data-tab="tentang" onclick="gantiTabAdmin('tentang')">
-          <span>&#128100; Kelola Tentang Saya</span>
+          <i class="fa-solid fa-id-card"></i>
+          <span>Kelola Tentang Saya</span>
         </button>
         <button type="button" class="admin-menu-btn" data-tab="pekerjaan" onclick="gantiTabAdmin('pekerjaan')">
-          <span>&#128188; Kelola Pekerjaan</span>
+          <i class="fa-solid fa-briefcase"></i>
+          <span>Kelola Pekerjaan</span>
         </button>
         <button type="button" class="admin-menu-btn" data-tab="proyek" onclick="gantiTabAdmin('proyek')">
-          <span>&#128640; Kelola Proyek</span>
+          <i class="fa-solid fa-folder-plus"></i>
+          <span>Kelola Proyek</span>
         </button>
         <button type="button" class="admin-menu-btn" data-tab="kontak" onclick="gantiTabAdmin('kontak')">
-          <span>&#9993; Kelola Kontak & Pesan</span>
+          <i class="fa-solid fa-inbox"></i>
+          <span>Kelola Kontak & Pesan</span>
         </button>
         <button type="button" class="admin-menu-btn" data-tab="akun" onclick="gantiTabAdmin('akun')">
-          <span>&#9881; Pengaturan Akun</span>
+          <i class="fa-solid fa-user-gear"></i>
+          <span>Pengaturan Akun</span>
         </button>
       </div>
 
       <div style="border-top: 1px solid var(--border-glass); padding-top: 14px;">
-        <button type="button" class="btn-secondary" style="width: 100%; margin-bottom: 8px; font-size: 0.82rem;" onclick="lihatTampilanPengunjung()">
-          Lihat Web Pengunjung
+        <button type="button" class="btn-secondary" style="width: 100%; margin-bottom: 8px; font-size: 0.82rem; padding: 10px;" onclick="lihatTampilanPengunjung()">
+          <i class="fa-solid fa-eye"></i> Lihat Web Pengunjung
         </button>
         <button type="button" class="btn-sm btn-danger-sm" style="width: 100%; padding: 9px;" onclick="logoutAdmin()">
-          Keluar (Logout)
+          <i class="fa-solid fa-right-from-bracket"></i> Keluar (Logout)
         </button>
       </div>
     </aside>
@@ -1004,7 +1039,7 @@
 
   <script>
     // =========================================================================
-    // KONFIGURASI & STATE APLIKASI
+    // 1. KONFIGURASI & STATE APLIKASI (SELARAS DENGAN TABEL NEON POSTGRESQL)
     // =========================================================================
     var API_ENDPOINT = '/api/index';
     var STATE = {
@@ -1012,11 +1047,77 @@
       tabAdmin: 'stats',
       tokenAdmin: localStorage.getItem('portofolio_admin_token') || '',
       dataPublik: {
-        beranda: null,
-        tentang: [],
-        pekerjaan: [],
-        proyek: [],
-        kontak: []
+        beranda: {
+          headline: 'Halo, Saya Pengembang Web & Kreator Digital',
+          subheadline: 'Full-Stack Web Developer & Cloud Database Specialist',
+          deskripsi_singkat: 'Selamat datang di website portofolio pribadi saya. Seluruh konten pada kelima menu dikelola langsung melalui Panel Admin yang terhubung ke database Neon PostgreSQL.',
+          url_foto_profil: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
+          url_cv: '#',
+          teks_tombol_cta: 'Lihat Proyek Saya'
+        },
+        tentang: [
+          {
+            id: 1,
+            kategori: 'bio',
+            judul: 'Profil & Visi Pengembangan',
+            deskripsi: 'Berfokus pada perancangan aplikasi web yang cepat, responsif di HP maupun Laptop, serta terintegrasi dengan database serverless modern.',
+            persentase_skill: 0,
+            urutan: 1
+          },
+          {
+            id: 2,
+            kategori: 'skill',
+            judul: 'PostgreSQL & Neon Serverless',
+            deskripsi: '',
+            persentase_skill: 92,
+            urutan: 2
+          },
+          {
+            id: 3,
+            kategori: 'skill',
+            judul: 'JavaScript Full-Stack & API',
+            deskripsi: '',
+            persentase_skill: 90,
+            urutan: 3
+          }
+        ],
+        pekerjaan: [
+          {
+            id: 1,
+            posisi: 'Full-Stack Web Developer',
+            nama_perusahaan: 'Studio Teknologi Digital',
+            lokasi: 'Indonesia',
+            periode_mulai: 'Jan 2024',
+            periode_selesai: 'Sekarang',
+            deskripsi_tugas: 'Merancang sistem manajemen konten berbasis Neon PostgreSQL dan antarmuka adaptif lintas perangkat.',
+            urutan: 1,
+            status_tampil: true
+          }
+        ],
+        proyek: [
+          {
+            id: 1,
+            judul_proyek: 'Website Portofolio & Neon CMS',
+            kategori_proyek: 'Web App',
+            ringkasan: 'Platform portofolio interaktif dengan pemisahan tampilan HP Android/iOS dan Laptop serta Panel Admin real-time.',
+            url_thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+            url_demo: '#',
+            url_repo: '#',
+            teknologi_dipakai: 'HTML5, CSS3, JavaScript, Vercel, Neon PostgreSQL',
+            fitur_unggulan: true,
+            status_tampil: true
+          }
+        ],
+        kontak: [
+          {
+            id: 1,
+            platform: 'Email',
+            label: 'Email Resmi',
+            nilai_kontak: 'halo@portofolio.dev',
+            url_tautan: 'mailto:halo@portofolio.dev',
+            urutan: 1
+          }
+        ]
       },
       filterKategori: 'Semua',
       kataKunciProyek: '',
@@ -1044,7 +1145,7 @@
     var confirmCallback = null;
 
     // =========================================================================
-    // UTILITAS AMAN (ESCAPE HTML, DETEKSI PERANGKAT, TOAST, KOMPRESI FOTO)
+    // 2. UTILITAS KEAMANAN, DETEKSI PERANGKAT, TOAST & KOMPRESI FOTO
     // =========================================================================
     function escapeHtml(str) {
       if (str === null || str === undefined) return '';
@@ -1112,7 +1213,7 @@
     }
 
     // =========================================================================
-    // PENGAMAN LAYAR: JIKA DI HP, PAKSA TUTUP LOGIN & PANEL ADMIN
+    // 3. PENGAMAN LAYAR: JIKA DI HP, PAKSA TUTUP LOGIN & PANEL ADMIN
     // =========================================================================
     function jagaKeamananPerangkat() {
       if (deteksiPerangkat() === 'mobile') {
@@ -1126,7 +1227,7 @@
     window.addEventListener('resize', jagaKeamananPerangkat);
 
     // =========================================================================
-    // PENCATATAN KUNJUNGAN PENGUNJUNG (VISITOR VIEW TRACKER)
+    // 4. PENCATATAN KUNJUNGAN PENGUNJUNG (VISITOR VIEW TRACKER)
     // =========================================================================
     function getVisitorHash() {
       var hash = localStorage.getItem('portofolio_visitor_id');
@@ -1152,7 +1253,7 @@
     }
 
     // =========================================================================
-    // NAVIGASI 5 MENU PENGUNJUNG (BERANDA, TENTANG, PEKERJAAN, PROYEK, KONTAK)
+    // 5. NAVIGASI 5 MENU PENGUNJUNG (BERANDA, TENTANG, PEKERJAAN, PROYEK, KONTAK)
     // =========================================================================
     function bukaMenu(namaMenu) {
       STATE.menuAktif = namaMenu;
@@ -1188,16 +1289,20 @@
     }
 
     // =========================================================================
-    // MUAT & RENDER DATA PUBLIK DARI NEON DATABASE
+    // 6. MUAT & RENDER DATA PUBLIK DARI NEON DATABASE
     // =========================================================================
     function muatDataPublik() {
       fetch(API_ENDPOINT + '?action=public_data')
         .then(function (res) { return res.json(); })
         .then(function (json) {
           if (json && json.sukses && json.data) {
-            STATE.dataPublik = json.data;
-            renderSemuaHalamanPublik();
+            if (json.data.beranda) STATE.dataPublik.beranda = json.data.beranda;
+            if (json.data.tentang) STATE.dataPublik.tentang = json.data.tentang;
+            if (json.data.pekerjaan) STATE.dataPublik.pekerjaan = json.data.pekerjaan;
+            if (json.data.proyek) STATE.dataPublik.proyek = json.data.proyek;
+            if (json.data.kontak) STATE.dataPublik.kontak = json.data.kontak;
           }
+          renderSemuaHalamanPublik();
         })
         .catch(function () {
           renderSemuaHalamanPublik();
@@ -1226,7 +1331,7 @@
 
       var html = '';
       html += '<div>';
-      html += '<div class="hero-badge">&#9679; Portofolio Resmi</div>';
+      html += '<div class="hero-badge"><i class="fa-solid fa-circle" style="font-size:0.55rem;"></i> Portofolio Resmi</div>';
       html += '<h1 class="hero-title">' + escapeHtml(b.headline) + '</h1>';
       html += '<div class="hero-subtitle">' + escapeHtml(b.subheadline) + '</div>';
       html += '<p class="hero-desc">' + escapeHtml(b.deskripsi_singkat) + '</p>';
@@ -1241,7 +1346,7 @@
       html += '</div>';
 
       html += '<div class="hero-photo-box">';
-      html += '<img src="' + escapeHtml(b.url_foto_profil || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80') + '" alt="Foto Profil" />';
+      html += '<img src="' + escapeHtml(b.url_foto_profil || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80') + '" alt="Foto Profil" onerror="this.src=\'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80\'" />';
       html += '</div>';
 
       box.innerHTML = html;
@@ -1284,7 +1389,7 @@
         for (var k = 0; k < skillItems.length; k++) {
           var persen = Number(skillItems[k].persentase_skill) || 80;
           html += '<div class="skill-row">';
-          html += '<div class="skill-label"><span>' + escapeHtml(skillItems[k].judul) + '</span><span style="color:var(--accent);">' + persen + '%</span></div>';
+          html += '<div class="skill-label"><span>' + escapeHtml(skillItems[k].judul) + '</span><span class="font-mono" style="color:var(--accent);">' + persen + '%</span></div>';
           html += '<div class="skill-track"><div class="skill-fill" style="width:' + persen + '%;"></div></div>';
           html += '</div>';
         }
@@ -1308,7 +1413,7 @@
         html += '<div class="glass-card">';
         html += '<span class="job-badge">' + escapeHtml(item.periode_mulai) + ' - ' + escapeHtml(item.periode_selesai) + '</span>';
         html += '<h3 style="font-size: 1.15rem; margin-bottom: 4px;">' + escapeHtml(item.posisi) + '</h3>';
-        html += '<div style="color: var(--accent); font-size: 0.9rem; font-weight: 600; margin-bottom: 10px;">' + escapeHtml(item.nama_perusahaan) + (item.lokasi ? ' &bull; ' + escapeHtml(item.lokasi) : '') + '</div>';
+        html += '<div style="color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600; margin-bottom: 10px;">' + escapeHtml(item.nama_perusahaan) + (item.lokasi ? ' &bull; ' + escapeHtml(item.lokasi) : '') + '</div>';
         html += '<p style="color: var(--text-muted); font-size: 0.9rem;">' + escapeHtml(item.deskripsi_tugas) + '</p>';
         html += '</div>';
       }
@@ -1402,9 +1507,13 @@
         html += '<article class="glass-card" style="display:flex; flex-direction:column; justify-content:space-between;">';
         html += '<div>';
         if (p.url_thumbnail) {
-          html += '<img class="project-thumb" src="' + escapeHtml(p.url_thumbnail) + '" alt="' + escapeHtml(p.judul_proyek) + '" loading="lazy" />';
+          html += '<img class="project-thumb" src="' + escapeHtml(p.url_thumbnail) + '" alt="' + escapeHtml(p.judul_proyek) + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80\'" />';
         }
-        html += '<span class="job-badge">' + escapeHtml(p.kategori_proyek) + '</span>';
+        html += '<div><span class="job-badge">' + escapeHtml(p.kategori_proyek) + '</span>';
+        if (p.fitur_unggulan) {
+          html += '<span class="featured-badge"><i class="fa-solid fa-star"></i> Unggulan</span>';
+        }
+        html += '</div>';
         html += '<h3 style="font-size: 1.12rem; margin-bottom: 6px;">' + escapeHtml(p.judul_proyek) + '</h3>';
         html += '<p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 10px;">' + escapeHtml(p.ringkasan) + '</p>';
         html += '<div style="margin-bottom: 14px;">' + tagHtml + '</div>';
@@ -1473,12 +1582,12 @@
           }
         })
         .catch(function () {
-          tampilToast('Koneksi server belum aktif.', true);
+          tampilToast('Koneksi server API belum aktif.', true);
         });
     }
 
     // =========================================================================
-    // LOGIN & PANEL ADMIN (EKSKLUSIF LAPTOP >= 1024px)
+    // 7. LOGIN & PANEL ADMIN (EKSKLUSIF LAPTOP >= 1024px)
     // =========================================================================
     function bukaModalLogin() {
       if (deteksiPerangkat() === 'mobile') {
@@ -1608,8 +1717,27 @@
         });
     }
 
+    function unduhCsvStatistik() {
+      var logs = (STATE.adminData.statistik && STATE.adminData.statistik.log_terbaru) || [];
+      var rows = ['ID,Menu Dikunjungi,Perangkat,Waktu Kunjung (WIB)'];
+      for (var i = 0; i < logs.length; i++) {
+        var r = logs[i];
+        rows.push(r.id + ',"' + r.halaman_dikunjungi + '","' + r.tipe_perangkat + '","' + r.waktu_kunjung + '"');
+      }
+      var blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'statistik-pengunjung-portofolio.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      tampilToast('Laporan CSV berhasil diunduh!');
+    }
+
     // =========================================================================
-    // RENDER KONTEN SETIAP TAB DI PANEL ADMIN
+    // 8. RENDER KONTEN SETIAP TAB DI PANEL ADMIN
     // =========================================================================
     function renderTabAdmin() {
       var area = document.getElementById('admin-content-area');
@@ -1624,12 +1752,16 @@
           if (st.perangkat[i].tipe_perangkat === 'desktop') deskCount = st.perangkat[i].jumlah;
         }
 
-        var html = '<h2 style="margin-bottom:6px;">Progres & Analitik Pengunjung</h2>';
-        html += '<p style="color:var(--text-muted); margin-bottom:22px;">Pantau jumlah tayangan halaman, pengunjung unik, dan perangkat yang digunakan.</p>';
+        var html = '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">';
+        html += '<div><h2 style="margin-bottom:4px;">Progres & Analitik Pengunjung</h2>';
+        html += '<p style="color:var(--text-muted); font-size:0.88rem;">Pantau jumlah tayangan halaman, pengunjung unik, dan perangkat yang digunakan.</p></div>';
+        html += '<button type="button" class="btn-secondary" style="padding:9px 14px; font-size:0.82rem;" onclick="unduhCsvStatistik()"><i class="fa-solid fa-file-csv"></i> Unduh CSV</button>';
+        html += '</div>';
+
         html += '<div class="stat-grid">';
         html += '<div class="stat-card"><div style="font-size:0.82rem; color:var(--text-muted);">Total Halaman Dilihat</div><div class="stat-val">' + st.total_views + '</div></div>';
-        html += '<div class="stat-card"><div style="font-size:0.82rem; color:var(--text-muted);">Pengunjung Unik</div><div class="stat-val">' + st.pengunjung_unik + '</div></div>';
-        html += '<div class="stat-card"><div style="font-size:0.82rem; color:var(--text-muted);">Akses via HP (Android/iOS)</div><div class="stat-val">' + mobCount + '</div></div>';
+        html += '<div class="stat-card"><div style="font-size:0.82rem; color:var(--text-muted);">Pengunjung Unik</div><div class="stat-val" style="color:var(--accent-cyan);">' + st.pengunjung_unik + '</div></div>';
+        html += '<div class="stat-card"><div style="font-size:0.82rem; color:var(--text-muted);">Akses via HP (Android/iOS)</div><div class="stat-val" style="color:var(--accent-amber);">' + mobCount + '</div></div>';
         html += '<div class="stat-card"><div style="font-size:0.82rem; color:var(--text-muted);">Akses via Laptop/Desktop</div><div class="stat-val">' + deskCount + '</div></div>';
         html += '</div>';
 
@@ -1639,7 +1771,7 @@
           var mp = st.menu_populer[m];
           html += '<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border-glass);">';
           html += '<span style="text-transform:capitalize; font-weight:600;">' + escapeHtml(mp.halaman_dikunjungi) + '</span>';
-          html += '<span style="color:var(--accent); font-weight:700;">' + mp.jumlah + ' views</span>';
+          html += '<span class="font-mono" style="color:var(--accent); font-weight:700;">' + mp.jumlah + ' views</span>';
           html += '</div>';
         }
         html += '</div>';
@@ -1648,7 +1780,7 @@
         html += '<table class="data-table"><thead><tr><th>Menu</th><th>Perangkat</th><th>Waktu</th></tr></thead><tbody>';
         for (var l = 0; l < st.log_terbaru.length; l++) {
           var lg = st.log_terbaru[l];
-          html += '<tr><td>' + escapeHtml(lg.halaman_dikunjungi) + '</td><td>' + escapeHtml(lg.tipe_perangkat) + '</td><td>' + escapeHtml(lg.waktu_kunjung) + '</td></tr>';
+          html += '<tr><td>' + escapeHtml(lg.halaman_dikunjungi) + '</td><td>' + escapeHtml(lg.tipe_perangkat) + '</td><td class="font-mono">' + escapeHtml(lg.waktu_kunjung) + '</td></tr>';
         }
         html += '</tbody></table></div>';
         html += '</div>';
@@ -1747,6 +1879,7 @@
         htmlP += '<div class="form-group"><label class="form-label">Teknologi Dipakai (pisahkan dengan koma)</label><input type="text" id="adm-p-tekno" class="input-field" placeholder="HTML, CSS, JavaScript, Neon DB" /></div>';
         htmlP += '<div class="grid-2"><div class="form-group"><label class="form-label">Link Live Demo</label><input type="text" id="adm-p-demo" class="input-field" placeholder="https://..." /></div>';
         htmlP += '<div class="form-group"><label class="form-label">Link Repository / Github</label><input type="text" id="adm-p-repo" class="input-field" placeholder="https://github.com/..." /></div></div>';
+        htmlP += '<div class="form-group"><label style="display:inline-flex; align-items:center; gap:8px; font-size:0.84rem; color:var(--text-muted); cursor:pointer;"><input type="checkbox" id="adm-p-unggulan" /> Tandai sebagai Proyek Unggulan (Tampil Paling Atas)</label></div>';
         htmlP += '<button type="submit" class="btn-primary">Publikasikan Proyek</button></form></div>';
 
         htmlP += '<div class="glass-card"><h3 style="margin-bottom:14px;">Daftar Postingan Proyek</h3>';
@@ -1791,7 +1924,7 @@
           for (var pm = 0; pm < pesanM.length; pm++) {
             var msg = pesanM[pm];
             htmlC += '<div style="padding:12px; background:rgba(11,15,25,0.6); border-radius:12px; margin-bottom:10px;">';
-            htmlC += '<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--accent);"><span>' + escapeHtml(msg.nama_pengirim) + ' (' + escapeHtml(msg.email_pengirim) + ')</span><span>' + escapeHtml(msg.waktu_kirim) + '</span></div>';
+            htmlC += '<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--accent);"><span>' + escapeHtml(msg.nama_pengirim) + ' (' + escapeHtml(msg.email_pengirim) + ')</span><span class="font-mono">' + escapeHtml(msg.waktu_kirim) + '</span></div>';
             htmlC += '<div style="font-weight:700; margin:4px 0;">' + escapeHtml(msg.subjek) + '</div>';
             htmlC += '<p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:8px;">' + escapeHtml(msg.isi_pesan) + '</p>';
             htmlC += '<button type="button" class="btn-sm btn-danger-sm" onclick="hapusItemAdmin(\'kontak_pesan\',' + msg.id + ')">Hapus Pesan</button>';
@@ -1817,7 +1950,7 @@
     }
 
     // =========================================================================
-    // AKSI SIMPAN & EDIT PER MODUL ADMIN
+    // 9. AKSI SIMPAN & EDIT PER MODUL ADMIN
     // =========================================================================
     function simpanBerandaAdmin(id) {
       kirimCrudAdmin('beranda', 'simpan', {
@@ -1890,6 +2023,7 @@
       document.getElementById('adm-p-tekno').value = item.teknologi_dipakai || '';
       document.getElementById('adm-p-demo').value = item.url_demo || '';
       document.getElementById('adm-p-repo').value = item.url_repo || '';
+      document.getElementById('adm-p-unggulan').checked = Boolean(item.fitur_unggulan);
     }
 
     function simpanProyekAdmin() {
@@ -1903,6 +2037,7 @@
         teknologi_dipakai: String(document.getElementById('adm-p-tekno').value || '').trim(),
         url_demo: String(document.getElementById('adm-p-demo').value || '').trim(),
         url_repo: String(document.getElementById('adm-p-repo').value || '').trim(),
+        fitur_unggulan: Boolean(document.getElementById('adm-p-unggulan').checked),
         status_tampil: true
       });
     }
@@ -1931,7 +2066,7 @@
     }
 
     // =========================================================================
-    // INISIALISASI SAAT HALAMAN PERTAMA KALI DIBUKA
+    // 10. INISIALISASI SAAT HALAMAN PERTAMA KALI DIBUKA
     // =========================================================================
     document.addEventListener('DOMContentLoaded', function () {
       jagaKeamananPerangkat();
