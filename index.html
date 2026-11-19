@@ -126,11 +126,46 @@
     .brand-logo {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 11px;
       font-weight: 800;
-      font-size: 1.15rem;
+      font-size: 1.08rem;
       letter-spacing: -0.02em;
       cursor: pointer;
+      min-width: 0;
+    }
+
+    .brand-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 12px rgba(0, 255, 170, 0.35);
+      flex-shrink: 0;
+      background: var(--bg-card);
+    }
+
+    @media (min-width: 1024px) {
+      .brand-avatar {
+        width: 38px;
+        height: 38px;
+      }
+      .brand-logo {
+        font-size: 1.15rem;
+      }
+    }
+
+    .brand-name-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 185px;
+    }
+
+    @media (min-width: 1024px) {
+      .brand-name-text {
+        max-width: 280px;
+      }
     }
 
     .brand-dot {
@@ -811,9 +846,21 @@
   <header class="mobile-top-bar mobile-only">
     <div class="mobile-top-inner">
       <div class="brand-logo" onclick="bukaMenu('beranda')">
-        <span class="brand-dot"></span>
-        <span>Portofolio</span>
+        <img id="mobile-header-avatar" class="brand-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Foto Profil" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'" />
+        <span id="mobile-header-name" class="brand-name-text">Portofolio</span>
       </div>
+      <span class="mobile-status-pill" id="mobile-active-label">Beranda</span>
+    </div>
+  </header>
+
+  <!-- =======================================================================
+       HEADER KHUSUS LAPTOP (>= 1024px) — TERMASUK TOMBOL LOGIN ADMIN
+       ======================================================================= -->
+  <header class="top-navbar desktop-only">
+    <div class="brand-logo" onclick="bukaMenu('beranda')">
+      <img id="desktop-header-avatar" class="brand-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Foto Profil" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'" />
+      <span id="desktop-header-name" class="brand-name-text">Portofolio Pribadi</span>
+    </div>
       <span class="mobile-status-pill" id="mobile-active-label">Beranda</span>
     </div>
   </header>
@@ -1047,6 +1094,9 @@
       tabAdmin: 'stats',
       tokenAdmin: localStorage.getItem('portofolio_admin_token') || '',
       dataPublik: {
+        profil: {
+          nama_tampilan: 'Portofolio Pribadi'
+        },
         beranda: {
           headline: 'Halo, Saya Pengembang Web & Kreator Digital',
           subheadline: 'Full-Stack Web Developer & Cloud Database Specialist',
@@ -1124,6 +1174,10 @@
       offsetProyek: 0,
       hasMoreProyek: false,
       adminData: {
+        profil_admin: {
+          nama_tampilan: 'Administrator Portofolio',
+          username: 'admin'
+        },
         statistik: {
           total_views: 0,
           pengunjung_unik: 0,
@@ -1296,6 +1350,7 @@
         .then(function (res) { return res.json(); })
         .then(function (json) {
           if (json && json.sukses && json.data) {
+            if (json.data.profil) STATE.dataPublik.profil = json.data.profil;
             if (json.data.beranda) STATE.dataPublik.beranda = json.data.beranda;
             if (json.data.tentang) STATE.dataPublik.tentang = json.data.tentang;
             if (json.data.pekerjaan) STATE.dataPublik.pekerjaan = json.data.pekerjaan;
@@ -1309,7 +1364,25 @@
         });
     }
 
+    function renderHeaderProfil() {
+      var defaultFoto = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
+      var foto = (STATE.dataPublik.beranda && STATE.dataPublik.beranda.url_foto_profil) ? STATE.dataPublik.beranda.url_foto_profil : defaultFoto;
+      var nama = (STATE.dataPublik.profil && STATE.dataPublik.profil.nama_tampilan) ? STATE.dataPublik.profil.nama_tampilan : 'Portofolio Pribadi';
+
+      var deskAvatar = document.getElementById('desktop-header-avatar');
+      var mobAvatar = document.getElementById('mobile-header-avatar');
+      var deskName = document.getElementById('desktop-header-name');
+      var mobName = document.getElementById('mobile-header-name');
+
+      if (deskAvatar) deskAvatar.src = foto;
+      if (mobAvatar) mobAvatar.src = foto;
+      if (deskName) deskName.textContent = nama;
+      if (mobName) mobName.textContent = nama;
+      document.title = nama + ' — Portofolio';
+    }
+
     function renderSemuaHalamanPublik() {
+      renderHeaderProfil();
       renderBerandaPublik();
       renderTentangPublik();
       renderPekerjaanPublik();
@@ -1662,6 +1735,7 @@
         .then(function (r) { return r.json(); })
         .then(function (json) {
           if (json && json.sukses) {
+            if (json.profil_admin) STATE.adminData.profil_admin = json.profil_admin;
             STATE.adminData.statistik = json.statistik;
             STATE.adminData.konten = json.konten;
             renderTabAdmin();
@@ -1937,13 +2011,14 @@
       }
 
       if (tab === 'akun') {
-        var htmlA = '<h2 style="margin-bottom:18px;">Pengaturan Akun Login Admin</h2>';
+        var prof = STATE.adminData.profil_admin || { nama_tampilan: 'Administrator Portofolio', username: 'admin' };
+        var htmlA = '<h2 style="margin-bottom:18px;">Pengaturan Akun & Nama Header</h2>';
         htmlA += '<div class="glass-card" style="max-width:480px;">';
         htmlA += '<form onsubmit="event.preventDefault(); simpanAkunAdmin();">';
-        htmlA += '<div class="form-group"><label class="form-label">Nama Tampilan Admin</label><input type="text" id="adm-u-nama" class="input-field" required value="Administrator Portofolio" /></div>';
-        htmlA += '<div class="form-group"><label class="form-label">Username Login Baru</label><input type="text" id="adm-u-user" class="input-field" required value="admin" /></div>';
+        htmlA += '<div class="form-group"><label class="form-label">Nama Lengkap Anda (Tampil di Header Website)</label><input type="text" id="adm-u-nama" class="input-field" required value="' + escapeHtml(prof.nama_tampilan || '') + '" /></div>';
+        htmlA += '<div class="form-group"><label class="form-label">Username Login Baru</label><input type="text" id="adm-u-user" class="input-field" required value="' + escapeHtml(prof.username || 'admin') + '" /></div>';
         htmlA += '<div class="form-group"><label class="form-label">Password Baru (Kosongkan jika tidak ingin diubah)</label><input type="password" id="adm-u-pass" class="input-field" placeholder="Masukkan password baru..." /></div>';
-        htmlA += '<button type="submit" class="btn-primary">Perbarui Kredensial</button>';
+        htmlA += '<button type="submit" class="btn-primary">Simpan Nama & Kredensial</button>';
         htmlA += '</form></div>';
         area.innerHTML = htmlA;
       }
