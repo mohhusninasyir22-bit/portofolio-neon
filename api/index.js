@@ -72,6 +72,9 @@ module.exports = async function handler(req, res) {
   try {
     // 1. AMBIL DATA PUBLIK UNTUK PENGUNJUNG (5 MENU)
     if (action === 'public_data') {
+      const adminRows = await sql`
+        SELECT nama_tampilan FROM admins ORDER BY id ASC LIMIT 1
+      `;
       const berandaRows = await sql`
         SELECT * FROM konten_beranda WHERE status_aktif = TRUE ORDER BY id DESC LIMIT 1
       `;
@@ -91,6 +94,9 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({
         sukses: true,
         data: {
+          profil: {
+            nama_tampilan: adminRows[0] ? adminRows[0].nama_tampilan : 'Portofolio Pribadi'
+          },
           beranda: berandaRows[0] || null,
           tentang: tentangRows,
           pekerjaan: pekerjaanRows,
@@ -231,6 +237,9 @@ module.exports = async function handler(req, res) {
 
     // 6. AMBIL DATA LENGKAP DASHBOARD ADMIN & STATISTIK PENGUNJUNG
     if (action === 'admin_dashboard') {
+      const adminInfoRows = await sql`
+        SELECT id, username, nama_tampilan FROM admins WHERE id = ${adminSesi.id} LIMIT 1
+      `;
       const totalViewsRows = await sql`SELECT COUNT(*)::int AS total FROM site_views`;
       const unikRows = await sql`SELECT COUNT(DISTINCT visitor_hash)::int AS total FROM site_views`;
       const deviceRows = await sql`
@@ -282,6 +291,10 @@ module.exports = async function handler(req, res) {
 
       return res.status(200).json({
         sukses: true,
+        profil_admin: adminInfoRows[0] || {
+          username: adminSesi.username,
+          nama_tampilan: 'Administrator Portofolio'
+        },
         statistik: {
           total_views: totalViewsRows[0] ? totalViewsRows[0].total : 0,
           pengunjung_unik: unikRows[0] ? unikRows[0].total : 0,
